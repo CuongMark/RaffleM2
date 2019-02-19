@@ -100,7 +100,6 @@ class TicketRepository implements TicketRepositoryInterface
         );
         
         $ticketModel = $this->ticketFactory->create()->setData($ticketData);
-        
         try {
             $this->resource->save($ticketModel);
         } catch (\Exception $exception) {

@@ -68,26 +68,26 @@ interface PrizeInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get prize
-     * @return string|null
+     * @return float|null
      */
     public function getPrize();
 
     /**
      * Set prize
-     * @param string $prize
+     * @param float $prize
      * @return \Angel\Raffle\Api\Data\PrizeInterface
      */
     public function setPrize($prize);
 
     /**
      * Get total
-     * @return string|null
+     * @return int|null
      */
     public function getTotal();
 
     /**
      * Set total
-     * @param string $total
+     * @param int $total
      * @return \Angel\Raffle\Api\Data\PrizeInterface
      */
     public function setTotal($total);

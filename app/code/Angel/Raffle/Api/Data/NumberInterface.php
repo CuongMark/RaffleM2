@@ -12,26 +12,26 @@ interface NumberInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get number_id
-     * @return string|null
+     * @return int|null
      */
     public function getNumberId();
 
     /**
      * Set number_id
-     * @param string $numberId
+     * @param int $numberId
      * @return \Angel\Raffle\Api\Data\NumberInterface
      */
     public function setNumberId($numberId);
 
     /**
      * Get prize_id
-     * @return string|null
+     * @return int|null
      */
     public function getPrizeId();
 
     /**
      * Set prize_id
-     * @param string $prizeId
+     * @param int $prizeId
      * @return \Angel\Raffle\Api\Data\NumberInterface
      */
     public function setPrizeId($prizeId);
@@ -53,13 +53,13 @@ interface NumberInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get number
-     * @return string|null
+     * @return int|null
      */
     public function getNumber();
 
     /**
      * Set number
-     * @param string $number
+     * @param int $number
      * @return \Angel\Raffle\Api\Data\NumberInterface
      */
     public function setNumber($number);

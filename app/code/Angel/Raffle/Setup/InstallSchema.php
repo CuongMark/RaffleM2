@@ -131,7 +131,7 @@ class InstallSchema implements InstallSchemaInterface
         );
 
         $table_angel_raffle_ticket->addColumn(
-            'Price',
+            'price',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             ['default' => '0','nullable' => False,'precision' => 12,'scale' => 4],
@@ -139,7 +139,7 @@ class InstallSchema implements InstallSchemaInterface
         );
 
         $table_angel_raffle_ticket->addColumn(
-            'Prize',
+            'prize',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             ['default' => '0','precision' => 12,'scale' => 4],
