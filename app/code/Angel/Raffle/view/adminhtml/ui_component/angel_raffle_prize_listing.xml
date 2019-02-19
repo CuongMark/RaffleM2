@@ -1,0 +1,73 @@
+<?xml version="1.0" ?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">angel_raffle_prize_listing.angel_raffle_prize_listing_data_source</item>
+		</item>
+	</argument>
+	<settings>
+		<spinner>angel_raffle_prize_columns</spinner>
+		<deps>
+			<dep>angel_raffle_prize_listing.angel_raffle_prize_listing_data_source</dep>
+		</deps>
+	</settings>
+	<dataSource component="Magento_Ui/js/grid/provider" name="angel_raffle_prize_listing_data_source">
+		<settings>
+			<updateUrl path="mui/index/render"/>
+		</settings>
+		<aclResource>Angel_Raffle::Prize</aclResource>
+		<dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="angel_raffle_prize_listing_data_source">
+			<settings>
+				<requestFieldName>id</requestFieldName>
+				<primaryFieldName>prize_id</primaryFieldName>
+			</settings>
+		</dataProvider>
+	</dataSource>
+	<listingToolbar name="listing_top">
+		<settings>
+			<sticky>true</sticky>
+		</settings>
+		<bookmark name="bookmarks"/>
+		<columnsControls name="columns_controls"/>
+		<filters name="listing_filters"/>
+		<paging name="listing_paging"/>
+	</listingToolbar>
+	<columns name="angel_raffle_prize_columns">
+		<selectionsColumn name="ids">
+			<settings>
+				<indexField>prize_id</indexField>
+			</settings>
+		</selectionsColumn>
+		<column name="prize_id">
+			<settings>
+				<filter>text</filter>
+				<sorting>asc</sorting>
+				<label translate="true">ID</label>
+			</settings>
+		</column>
+		<column name="product_id">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">product_id</label>
+			</settings>
+		</column>
+		<column name="name">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">name</label>
+			</settings>
+		</column>
+		<column name="prize">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">prize</label>
+			</settings>
+		</column>
+		<column name="total">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">total</label>
+			</settings>
+		</column>
+	</columns>
+</listing>

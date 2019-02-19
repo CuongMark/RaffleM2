@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+	<acl>
+		<resources>
+			<resource id="Magento_Backend::admin">
+				<resource id="Magento_Backend::stores">
+					<resource id="Magento_Backend::stores_settings">
+						<resource id="Magento_Config::config">
+							<resource id="Angel_Raffle::config" title="raffle"/>
+						</resource>
+					</resource>
+				</resource>
+				<resource id="Angel_Raffle::raffle" sortOrder="10" title="Raffle" />
+				<resource id="Angel_Raffle::Ticket" sortOrder="10" title="Raffle Ticket" />
+				<resource id="Magento_Sales::sales">
+					<resource id="Angel_Raffle::report" sortOrder="10" title="Raffle Report"/>
+				</resource>
+			</resource>
+		</resources>
+	</acl>
+</config>

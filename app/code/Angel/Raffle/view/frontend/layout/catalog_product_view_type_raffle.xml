@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Angel_Raffle::css/raffle.css"/>
+    </head>
+    <body>
+        <referenceContainer name="product.info.main">
+            <block class="Angel\Raffle\Block\Raffle\View" name="raffle.block" as="raffle.block" after="product.info.price" cacheable="false" template="Angel_Raffle::product/raffle-information.phtml"/>
+        </referenceContainer>
+        <referenceBlock name="product.info.addtocart">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Angel_Raffle::product/addtocart.phtml</argument>
+            </action>
+        </referenceBlock>
+    </body>
+</page>

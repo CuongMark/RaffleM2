@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+	<menu>
+		<add id="Angel::top_level" module="Angel_Raffle" resource="Magento_Backend::content" sortOrder="10" title="Raffle"/>
+		<add action="angel_raffle/index/index" id="Angel_Raffle::raffle" module="Angel_Raffle" parent="Angel::top_level" resource="Angel_Raffle::raffle" sortOrder="90" title="Raffle Management"/>
+		<add action="angel_raffle/ticket/index" id="Angel_Raffle::ticket" module="Angel_Raffle" parent="Angel::top_level" resource="Angel_Raffle::raffle" sortOrder="100" title="Tickets"/>
+		<add action="adminhtml/system_config/edit/section/raffle" id="Angel_Raffle::config" module="Angel_Raffle" parent="Angel::top_level" resource="Angel_Raffle::config" sortOrder="130" title="Setting"/>
+
+		<add action="angel_raffle/report/index" id="Angel_Raffle::report" module="Angel_Raffle" parent="Magento_Sales::sales_operation" resource="Angel_Raffle::report" sortOrder="99" title="Raffle Report"/>
+	</menu>
+</config>
