@@ -3,7 +3,7 @@
 
 namespace Angel\Raffle\Model;
 
-use Angel\Fifty\Model\Ticket\Status;
+use Angel\Raffle\Model\Ticket\Status;
 use Angel\Raffle\Api\TicketRepositoryInterface;
 use Angel\Raffle\Model\Data\TicketFactory as TicketDataFactory;
 use Magento\Catalog\Model\ProductRepository;
@@ -61,14 +61,12 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
     public function postPurchase($product_id, $qty, $customerId)
     {
         try {
-
             $product = $this->productRepository->getById($product_id);
             $availableQty = $product->getData('total_tickets');
             $qty = min($availableQty, $qty);
             if ($qty<=0){
                 throw new \Exception('Qty is not available');
             }
-
             /** @var \Angel\Raffle\Model\Data\Ticket $ticket */
             $ticket = $this->ticketDataFactory->create();
             $lastTicketNumber = $this->raffle->getLastTicketNumber($product);
@@ -82,11 +80,14 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
             $this->_eventManager->dispatch('angel_raffle_create_new_ticket', ['ticket' => $ticket, 'product' => $product]);
 
             if (!in_array($ticket->getStatus(),[Status::STATUS_CANCELED, Status::STATUS_WINNING, Status::STATUS_LOSE])){
-
+                $this->raffle->generateWinningNumber($product, $ticket);
+                if ($ticket->getStatus() == Status::STATUS_WINNING) {
+                    $this->_eventManager->dispatch('angel_raffle_winning_ticket_ticket', ['ticket' => $ticket, 'product' => $product]);
+                }
             }
 
             $ticket = $this->ticketRepository->save($ticket);
-            $this->messageManager->addSuccessMessage(__('You purchased %1 tickets successfully.', $qty));
+            $this->messageManager->addSuccessMessage(__('You purchased %1 %2 tickets successfully.', $qty, $product->getName()));
             return $ticket;
         } catch (\Exception $e){
             $this->messageManager->addErrorMessage($e->getMessage());

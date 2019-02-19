@@ -8,6 +8,7 @@
 namespace Angel\Raffle\Ui\DataProvider\Product\Form\Modifier;
 
 use Angel\Raffle\Model\Product\Attribute\Source\RaffleStatus;
+use Angel\Raffle\Model\ResourceModel\Prize\CollectionFactory;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
@@ -40,12 +41,12 @@ class Raffle extends AbstractModifier
      */
     const FIELD_ENABLE = 'affect_product_custom_options';
     const FIELD_PRIZE_ID_NAME = 'prize_id';
-    const FIELD_LABEL_NAME = 'label';
+    const FIELD_LABEL_NAME = 'name';
     const FIELD_STORE_TITLE_NAME = 'store_title';
     const FIELD_TYPE_NAME = 'type';
     const FIELD_IS_REQUIRE_NAME = 'is_require';
     const FIELD_SORT_ORDER_NAME = 'sort_order';
-    const FIELD_PRICE_NAME = 'price';
+    const FIELD_PRICE_NAME = 'prize';
     const FIELD_PRICE_TYPE_NAME = 'price_type';
     const FIELD_TOTAL_NAME = 'total';
     const FIELD_IS_DELETE = 'is_delete';
@@ -75,18 +76,21 @@ class Raffle extends AbstractModifier
     protected $arrayManager;
 
     protected $meta = [];
+    private $prizeCollectionFactory;
 
     public function __construct(
         LocatorInterface $locator,
         ArrayManager $arrayManager,
         ProductOptionsPrice $productOptionsPrice,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        CollectionFactory $prizeCollectionFactory
 
     ){
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
         $this->productOptionsPrice = $productOptionsPrice;
         $this->storeManager = $storeManager;
+        $this->prizeCollectionFactory = $prizeCollectionFactory;
     }
 
     /**
@@ -95,7 +99,23 @@ class Raffle extends AbstractModifier
      */
     public function modifyData(array $data)
     {
-        return $data;
+        $product = $this->locator->getProduct();
+
+        if (!in_array($product->getTypeId(), [\Angel\Raffle\Model\Product\Type\Raffle::TYPE_ID])){
+            return $data;
+        }
+        $collection = $this->prizeCollectionFactory->create()->addFieldToFilter('product_id', $product->getId());
+
+        return array_replace_recursive(
+            $data,
+            [
+                $this->locator->getProduct()->getId() => [
+                    static::DATA_SOURCE_DEFAULT => [
+                        static::GRID_PRIZE_NAME => $collection->getData(),
+                    ]
+                ]
+            ]
+        );
     }
 
     /**
@@ -110,7 +130,7 @@ class Raffle extends AbstractModifier
             return $meta;
         }
         /** @var RaffleStatus $productTypeInstance */
-        if ($product->getFiftyStatus() != RaffleStatus::PENDING) {
+        if ($product->getRaffleStatus() != RaffleStatus::PENDING) {
             $meta = $this->disableTotalTicketAtField($meta);
             $meta = $this->disableStatusField($meta);
         }

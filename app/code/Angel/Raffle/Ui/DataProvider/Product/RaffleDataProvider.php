@@ -3,8 +3,8 @@
 namespace Angel\Raffle\Ui\DataProvider\Product;
 
 
-use Angel\Fifty\Model\PrizeManagement;
-use Angel\Fifty\Model\TicketManagement;
+use Angel\Raffle\Model\PrizeManagement;
+use Angel\Raffle\Model\TicketManagement;
 use Angel\Raffle\Model\Product\Type\Raffle;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;

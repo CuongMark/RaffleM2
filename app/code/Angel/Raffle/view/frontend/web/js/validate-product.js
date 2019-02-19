@@ -11,7 +11,7 @@ define([
     'Angel_Raffle/js/model/raffle',
     'Magento_Customer/js/customer-data',
     'mage/validation'
-], function ($, ko, mage, validation, purchaseAction, customerData) {
+], function ($, ko, mage, validation, purchaseAction, raffle, customerData) {
     'use strict';
 
     $.widget('raffle.purchaseTicket', {
@@ -32,7 +32,7 @@ define([
         _create: function () {
             var self = this;
             var bindSubmit = this.options.bindSubmit;
-            raffle.status =
+            raffle.status = this.options.status;
             this.element.validation({
                 radioCheckboxClosest: this.options.radioCheckboxClosest,
 

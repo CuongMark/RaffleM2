@@ -16,30 +16,32 @@ interface TicketInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     const CUSTOMER_ID = 'customer_id';
     const TICKET_ID = 'ticket_id';
     const END = 'end';
+    const WINNING_NUMBERS = 'winning_numbers';
+    const WINNING_PRIZE = 'winning_prize';
     const PAYOUT_TRANSACTION_ID = 'payout_transaction_id';
 
     /**
      * Get ticket_id
-     * @return string|null
+     * @return int|null
      */
     public function getTicketId();
 
     /**
      * Set ticket_id
-     * @param string $ticketId
+     * @param int $ticketId
      * @return \Angel\Raffle\Api\Data\TicketInterface
      */
     public function setTicketId($ticketId);
 
     /**
-     * Get start
+     * Get int
      * @return string|null
      */
     public function getStart();
 
     /**
      * Set start
-     * @param string $start
+     * @param int $start
      * @return \Angel\Raffle\Api\Data\TicketInterface
      */
     public function setStart($start);
@@ -61,91 +63,91 @@ interface TicketInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Get end
-     * @return string|null
+     * @return int|null
      */
     public function getEnd();
 
     /**
      * Set end
-     * @param string $end
+     * @param int $end
      * @return \Angel\Raffle\Api\Data\TicketInterface
      */
     public function setEnd($end);
 
     /**
      * Get Price
-     * @return string|null
+     * @return float|null
      */
     public function getPrice();
 
     /**
      * Set Price
-     * @param string $price
+     * @param float $price
      * @return \Angel\Raffle\Api\Data\TicketInterface
      */
     public function setPrice($price);
 
     /**
      * Get Prize
-     * @return string|null
+     * @return float|null
      */
     public function getPrize();
 
     /**
      * Set Prize
-     * @param string $prize
+     * @param float $prize
      * @return \Angel\Raffle\Api\Data\TicketInterface
      */
     public function setPrize($prize);
 
     /**
      * Get product_id
-     * @return string|null
+     * @return int|null
      */
     public function getProductId();
 
     /**
      * Set product_id
-     * @param string $productId
+     * @param int $productId
      * @return \Angel\Raffle\Api\Data\TicketInterface
      */
     public function setProductId($productId);
 
     /**
      * Get transaction_id
-     * @return string|null
+     * @return int|null
      */
     public function getTransactionId();
 
     /**
      * Set transaction_id
-     * @param string $transactionId
+     * @param int $transactionId
      * @return \Angel\Raffle\Api\Data\TicketInterface
      */
     public function setTransactionId($transactionId);
 
     /**
      * Get payout_transaction_id
-     * @return string|null
+     * @return int|null
      */
     public function getPayoutTransactionId();
 
     /**
      * Set payout_transaction_id
-     * @param string $payoutTransactionId
+     * @param int $payoutTransactionId
      * @return \Angel\Raffle\Api\Data\TicketInterface
      */
     public function setPayoutTransactionId($payoutTransactionId);
 
     /**
      * Get customer_id
-     * @return string|null
+     * @return int|null
      */
     public function getCustomerId();
 
     /**
      * Set customer_id
-     * @param string $customerId
+     * @param int $customerId
      * @return \Angel\Raffle\Api\Data\TicketInterface
      */
     public function setCustomerId($customerId);
@@ -175,4 +177,17 @@ interface TicketInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return \Angel\Raffle\Api\Data\TicketInterface
      */
     public function setStatus($status);
+
+    /**
+     * Get total
+     * @return string|null
+     */
+    public function getWinningNumbers();
+
+    /**
+     * Set total
+     * @param string $winning_numbers
+     * @return \Angel\Raffle\Api\Data\TicketInterface
+     */
+    public function setWinningNumbers($winning_numbers);
 }

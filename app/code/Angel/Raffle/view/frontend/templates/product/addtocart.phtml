@@ -53,7 +53,7 @@ if($customerSession->isLoggedIn()) {
         "#product_addtocart_form": {
             "Angel_Raffle/js/validate-product": {
                 "loginUrl" : "<?= $block->getUrl('customer/account/login') ?>",
-                "TicketStatus" : <?= json_encode(\Angel\Fifty\Model\Ticket\Status::getOptionArray()) ?>
+                "TicketStatus" : <?= json_encode(\Angel\Raffle\Model\Ticket\Status::getOptionArray()) ?>
             }
         }
     }

@@ -1,8 +1,7 @@
 <?xml version="1.0" ?>
 <page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
 	<head>
-		<css src="Angel_Fifty::css/countdown/timebox.css"/>
-		<css src="Angel_Fifty::css/fifty.css"/>
+		<css src="Angel_Raffle::css/raffle.css"/>
 	</head>
 	<body>
 		<referenceContainer name="content">

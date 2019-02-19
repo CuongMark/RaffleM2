@@ -106,7 +106,7 @@ class Ticket extends \Magento\Framework\Api\AbstractExtensibleObject implements 
 
     /**
      * Get Prize
-     * @return string|null
+     * @return float|null
      */
     public function getPrize()
     {
@@ -115,7 +115,7 @@ class Ticket extends \Magento\Framework\Api\AbstractExtensibleObject implements 
 
     /**
      * Set Prize
-     * @param string $prize
+     * @param float $prize
      * @return \Angel\Raffle\Api\Data\TicketInterface
      */
     public function setPrize($prize)
@@ -235,5 +235,24 @@ class Ticket extends \Magento\Framework\Api\AbstractExtensibleObject implements 
     public function setStatus($status)
     {
         return $this->setData(self::STATUS, $status);
+    }
+
+    /**
+     * Get total
+     * @return string|null
+     */
+    public function getWinningNumbers()
+    {
+        return $this->_get(self::WINNING_NUMBERS);
+    }
+
+    /**
+     * Set total
+     * @param string $winning_number
+     * @return \Angel\Raffle\Api\Data\TicketInterface
+     */
+    public function setWinningNumbers($winning_number)
+    {
+        return $this->setData(self::WINNING_NUMBERS, $winning_number);
     }
 }

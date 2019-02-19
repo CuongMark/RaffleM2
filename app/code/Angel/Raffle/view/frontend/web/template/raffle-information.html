@@ -1,20 +1,24 @@
-<strong data-bind="i18n:'Your credit'"></strong>: <span data-bind="text: customerCreditFormated"></span>
+<strong data-bind="i18n:'Your credit'"></strong>: <span data-bind="text: customerCreditFormated, attr: {class: earnMoneyClass }"></span>
 <!-- ko if: hasTickets -->
 <table class="my-tickets">
     <tr class="head">
-        <th data-bind="i18n:'Id'"></th>
+        <!--<th data-bind="i18n:'Id'"></th>-->
         <th data-bind="i18n:'Start'"></th>
         <th data-bind="i18n:'End'"></th>
         <th data-bind="i18n:'Price'"></th>
-        <th data-bind="i18n:'Status'"></th>
+        <th data-bind="i18n:'Winning Prize'"></th>
+        <th data-bind="i18n:'Winning Numbers'"></th>
+        <!--<th data-bind="i18n:'Status'"></th>-->
     </tr>
     <!-- ko foreach: { data: tickets(), as: 'ticket'}  -->
     <tr>
-        <td data-bind="text: ticket.ticket_id"></td>
+        <!--<td data-bind="text: ticket.ticket_id"></td>-->
         <td data-bind="text: ticket.start"></td>
         <td data-bind="text: ticket.end"></td>
-        <td data-bind="text: ticket.price"></td>
-        <td data-bind="text: ticket.status"></td>
+        <td data-bind="text: $parent.formatPrice(ticket.price) "></td>
+        <td data-bind="text: $parent.formatPrice(ticket.prize) "></td>
+        <td data-bind="text: ticket.winning_numbers"></td>
+        <!--<td data-bind="text: ticket.status"></td>-->
     </tr>
     <!--/ko-->
 </table>
