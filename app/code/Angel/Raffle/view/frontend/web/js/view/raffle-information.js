@@ -9,8 +9,9 @@ define([
     'uiComponent',
     'Angel_Raffle/js/model/raffle',
     'Magento_Customer/js/customer-data',
-    'Magento_Catalog/js/price-utils'
-], function ($, ko, Component, raffle, customerData, priceUtils) {
+    'Magento_Catalog/js/price-utils',
+    'mage/url'
+], function ($, ko, Component, raffle, customerData, priceUtils, urlBuilder) {
     'use strict';
 
     return Component.extend({
@@ -21,8 +22,11 @@ define([
         tickets: raffle.tickets,
         totalTicket : raffle.totalTicket,
         availableQty: ko.computed(function () {
-            return raffle.totalTicket - raffle.totalTicketSold();
+            return raffle.totalTicket() - raffle.totalTicketSold();
         }),
+        getViewUrl: function(id){
+            return urlBuilder.build('raffle/ticket/view/id/' + id);
+        },
         priceFormat : window.checkoutConfig?window.checkoutConfig.priceFormat:
             {"pattern":"$%s","precision":2,"requiredPrecision":2,"decimalSymbol":".","groupSymbol":",","groupLength":3,"integerRequired":false},
         customer: customerData.get('customer'),
