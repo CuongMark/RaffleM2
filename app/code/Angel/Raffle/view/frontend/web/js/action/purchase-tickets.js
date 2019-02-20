@@ -41,6 +41,7 @@ define([
                     var tickets = raffle.tickets();
                     tickets.push(response);
                     raffle.tickets(tickets);
+                    raffle.totalTicketSold(tickets.end);
                     customerData.invalidate(['customer']);
                 }
                 messageContainer.addErrorMessage({

@@ -74,6 +74,14 @@ class Raffle
 
     /**
      * @param Product $product
+     */
+    public function getPrizes($product){
+        return $prizesCollection = $this->prizeCollectionFactory->create()
+            ->addFieldToFilter('product_id', $product->getId());
+    }
+
+    /**
+     * @param Product $product
      * @param \Angel\Raffle\Model\Data\Ticket $ticket
      * @return \Angel\Raffle\Model\Data\Ticket
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -116,7 +124,6 @@ class Raffle
 
     /**
      * @param ResourceModel\Ticket\Collection $collection
-     * @return mixed
      */
     public function joinTotalWinningNumbersToTicketsCollection($collection){
 
@@ -127,6 +134,68 @@ class Raffle
                 'winning_numbers' => 'GROUP_CONCAT(number.number, \' \')'
             ]
         )->group('main_table.ticket_id');
+    }
+    /**
+     * @param ResourceModel\Ticket\Collection $collection
+     */
+    public function joinCustomerEmailToTicketsCollection($collection){
+
+        $collection->getSelect()->joinLeft(
+            ['customer' => $collection->getTable('customer_entity')],
+            'main_table.customer_id = customer.entity_id',
+            [
+                'customer_email' => 'customer.email'
+            ]
+        );
+    }
+    /**
+     * @param ResourceModel\Ticket\Collection $collection
+     */
+    public function joinProductNameToTicketsCollection($collection){
+        $productNameAttributeId = \Magento\Framework\App\ObjectManager::getInstance()->create('Magento\Eav\Model\Config')
+            ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, \Magento\Catalog\Api\Data\ProductInterface::NAME)
+            ->getAttributeId();
+        $collection->getSelect()->joinLeft(['product_varchar' => $collection->getTable('catalog_product_entity_varchar')],
+            "product_varchar.entity_id = main_table.product_id AND product_varchar.attribute_id = $productNameAttributeId", ['product_name' => 'product_varchar.value']
+        );
+        return $collection;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     */
+    public function joinTotalPrizeToProductCollection($collection){
+        $prizeCollection = $this->prizeCollectionFactory->create();
+        $prizeCollection->getSelect()->columns([
+            'total_prizes' => 'SUM(total)',
+            'total_prizes_price' => 'SUM(total * prize)'
+        ])->group('product_id');
+        $collection->getSelect()->joinLeft(
+            ['prize' => new \Zend_Db_Expr('('.$prizeCollection->getSelect()->__toString().')')],
+            'prize.product_id = e.entity_id',
+            ['total_prizes' => 'prize.total_prizes', 'total_prizes_price' => 'prize.total_prizes_price']
+        );
+        $collection->getSelect()->joinLeft(
+            ['number' => $collection->getTable('angel_raffle_number')],
+            'prize.prize_id = number.prize_id',
+            ['numbers_generated' => 'COUNT(number.number)']
+        );
+        return $collection;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     */
+    public function joinTotalPrizeWonToProductCollection($collection){
+        $ticketCollection = $this->ticketCollectionFactory->create();
+        $ticketCollection->getSelect()->columns(['total_price' => 'SUM(price)', 'total_prize_won' => 'SUM(prize)'])->group('product_id');
+        $collection->getSelect()->joinLeft(
+            ['ticket' => new \Zend_Db_Expr('('.$ticketCollection->getSelect()->__toString().')')],
+            'ticket.product_id = e.entity_id',
+            ['total_price' => 'ticket.total_price', 'total_prize_won' => 'ticket.total_prize_won']
+        );
     }
 
     /**
@@ -152,7 +221,7 @@ class Raffle
         /** @var NumberCollection $collection */
         $numberCollection = $this->numberCollectionFactory->create();
         $numberCollection->getSelect()->columns([
-            'winning_numbers' => 'GROUP_CONCAT(number,\', \')',
+            'winning_numbers' => 'GROUP_CONCAT(number,\' \')',
             'total_winning_numbers' => 'COUNT(number)'
         ])->group('prize_id');
         $collection->getSelect()->joinLeft(
@@ -160,9 +229,9 @@ class Raffle
             'main_table.prize_id = number.prize_id',
             [
                 'winning_numbers' => 'number.winning_numbers',
-                'total_winning_numbers' => 'number.total_winning_numbers',
-                'total_winning_price' => '(prize * number.total_winning_numbers)',
-                'total_prize_left' => '(main_table.total - number.total_winning_numbers)'
+                'total_winning_numbers' => 'IF(number.total_winning_numbers, number.total_winning_numbers, 0)',
+                'total_winning_price' => 'IF(number.total_winning_numbers, (prize * number.total_winning_numbers), 0)',
+                'total_prize_left' => '(main_table.total - IF(number.total_winning_numbers, number.total_winning_numbers, 0))'
             ]
         );
         return $collection;

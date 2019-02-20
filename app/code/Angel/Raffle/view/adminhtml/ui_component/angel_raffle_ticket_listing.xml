@@ -25,8 +25,9 @@
 	</dataSource>
 	<listingToolbar name="listing_top">
 		<settings>
-			<sticky>true</sticky>
+			<sticky>false</sticky>
 		</settings>
+		<exportButton name="export_button" />
 		<bookmark name="bookmarks"/>
 		<columnsControls name="columns_controls"/>
 		<filters name="listing_filters"/>
@@ -48,38 +49,64 @@
 		<column name="start">
 			<settings>
 				<filter>text</filter>
-				<label translate="true">start</label>
+				<label translate="true">Start</label>
 			</settings>
 		</column>
 		<column name="end">
 			<settings>
 				<filter>text</filter>
-				<label translate="true">end</label>
+				<label translate="true">End</label>
 			</settings>
 		</column>
-		<column name="Price">
+		<column name="winning_numbers">
 			<settings>
 				<filter>text</filter>
+				<label translate="true">Winning Numbers</label>
+			</settings>
+		</column>
+		<column name="customer_email">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Customer</label>
+			</settings>
+		</column>
+		<column name="product_name">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Raffle</label>
+			</settings>
+		</column>
+		<column name="prize" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="70">
+			<settings>
+				<filter>textRange</filter>
+				<label translate="true">Winning Prize</label>
+			</settings>
+		</column>
+		<column name="price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="70">
+			<settings>
+				<filter>textRange</filter>
 				<label translate="true">Price</label>
 			</settings>
 		</column>
-		<column name="Prize">
+		<column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="40">
 			<settings>
-				<filter>text</filter>
-				<label translate="true">Prize</label>
+				<filter>dateRange</filter>
+				<dataType>date</dataType>
+				<label translate="true">Created at</label>
 			</settings>
 		</column>
-		<column name="created_at">
+		<column name="status" component="Magento_Ui/js/grid/columns/select" sortOrder="50">
 			<settings>
-				<filter>text</filter>
-				<label translate="true">created_at</label>
+				<options class="Angel\Raffle\Model\Ticket\Status"/>
+				<filter>select</filter>
+				<dataType>select</dataType>
+				<label translate="true">Status</label>
 			</settings>
 		</column>
-		<column name="status">
+		<actionsColumn name="actions" class="Angel\Raffle\Ui\Component\Listing\Columns\TicketViewActions" sortOrder="200">
 			<settings>
-				<filter>text</filter>
-				<label translate="true">status</label>
+				<indexField>entity_id</indexField>
 			</settings>
-		</column>
+		</actionsColumn>
 	</columns>
 </listing>

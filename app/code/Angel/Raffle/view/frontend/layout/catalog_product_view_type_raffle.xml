@@ -6,6 +6,7 @@
     <body>
         <referenceContainer name="product.info.main">
             <block class="Angel\Raffle\Block\Raffle\View" name="raffle.block" as="raffle.block" after="product.info.price" cacheable="false" template="Angel_Raffle::product/raffle-information.phtml"/>
+            <block class="Angel\Raffle\Block\Raffle\View" name="prize.block" template="Angel_Raffle::product/prizes.phtml"/>
         </referenceContainer>
         <referenceBlock name="product.info.addtocart">
             <action method="setTemplate">

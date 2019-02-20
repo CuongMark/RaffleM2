@@ -12,6 +12,8 @@ define([
     return {
         id: ko.observable(0),
         tickets: ko.observable([]),
+        totalTicket: 0,
+        totalTicketSold: ko.observable(0),
         status: []
     };
 });

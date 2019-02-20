@@ -12,6 +12,8 @@
 <?php
 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 $customerSession = $objectManager->get('Magento\Customer\Model\Session');
+/** @var \Angel\Raffle\Model\Raffle $raffle */
+$raffle = $objectManager->get('Angel\Raffle\Model\Raffle');
 if($customerSession->isLoggedIn()) {
     $buttonTitle = __('Purchase Tickets');
 } else {
@@ -53,8 +55,11 @@ if($customerSession->isLoggedIn()) {
         "#product_addtocart_form": {
             "Angel_Raffle/js/validate-product": {
                 "loginUrl" : "<?= $block->getUrl('customer/account/login') ?>",
-                "TicketStatus" : <?= json_encode(\Angel\Raffle\Model\Ticket\Status::getOptionArray()) ?>
+                "TicketStatus" : <?= json_encode(\Angel\Raffle\Model\Ticket\Status::getOptionArray()) ?>,
+                "totalTicket" : <?= $_product->getTotalTickets() ?>,
+                "totalTicketSold" : <?= $raffle->getLastTicketNumber($_product) ?>
             }
         }
     }
 </script>
+<?= $block->getChildHtml('prize.block') ?>

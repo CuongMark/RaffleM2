@@ -20,17 +20,24 @@ use Magento\Framework\Api\Search\ReportingInterface;
  */
 class RaffleDataProvider extends \Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider
 {
+    /**
+     * @var Raffle
+     */
+    private $raffle;
+
     public function __construct(
         $name,
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
+        \Angel\Raffle\Model\Raffle $raffle,
         $addFieldStrategies = [],
         $addFilterStrategies = [],
         array $meta = [],
         array $data = []
     ){
         parent::__construct($name, $primaryFieldName, $requestFieldName, $collectionFactory, $addFieldStrategies, $addFilterStrategies, $meta, $data);
+        $this->raffle = $raffle;
     }
 
     /**
@@ -42,6 +49,8 @@ class RaffleDataProvider extends \Magento\Catalog\Ui\DataProvider\Product\Produc
     {
         $this->getCollection()->addAttributeToFilter('type_id', ['in' => [Raffle::TYPE_ID]]);
         $this->getCollection()->addAttributeToSelect(['raffle_status', 'total_ticket' ,'prefix']);
+        $this->raffle->joinTotalPrizeToProductCollection($this->getCollection());
+        $this->raffle->joinTotalPrizeWonToProductCollection($this->getCollection());
         if (!$this->getCollection()->isLoaded()) {
             $this->getCollection()->load();
         }

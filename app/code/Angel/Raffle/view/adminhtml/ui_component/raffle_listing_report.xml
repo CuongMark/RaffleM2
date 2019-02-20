@@ -8,19 +8,16 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">raffle_listing.raffle_listing_data_source</item>
-        </item>
-        <item name="buttons" xsi:type="array">
-            <item name="back" xsi:type="string">Angel\Raffle\Block\Adminhtml\Product\AddNewButton</item>
+            <item name="provider" xsi:type="string">raffle_listing_report.raffle_listing_report_data_source</item>
         </item>
     </argument>
     <settings>
         <spinner>product_columns</spinner>
         <deps>
-            <dep>raffle_listing.raffle_listing_data_source</dep>
+            <dep>raffle_listing_report.raffle_listing_report_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="raffle_listing_data_source" component="Magento_Ui/js/grid/provider">
+    <dataSource name="raffle_listing_report_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
                 <param name="dataScope" xsi:type="string">filters.store_id</param>
@@ -28,7 +25,7 @@
             <updateUrl path="mui/index/render"/>
         </settings>
         <aclResource>Magento_Catalog::products</aclResource>
-        <dataProvider class="Angel\Raffle\Ui\DataProvider\Product\RaffleDataProvider" name="raffle_listing_data_source">
+        <dataProvider class="Angel\Raffle\Ui\DataProvider\Product\RaffleDataProvider" name="raffle_listing_report_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>entity_id</primaryFieldName>
@@ -76,7 +73,7 @@
         <settings>
             <childDefaults>
                 <param name="fieldAction" xsi:type="array">
-                    <item name="provider" xsi:type="string">raffle_listing.raffle_listing.product_columns.actions</item>
+                    <item name="provider" xsi:type="string">raffle_listing_report.raffle_listing_report.product_columns.actions</item>
                     <item name="target" xsi:type="string">applyAction</item>
                     <item name="params" xsi:type="array">
                         <item name="0" xsi:type="string">edit</item>
@@ -174,7 +171,7 @@
                 <label translate="true">Status</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions" sortOrder="200">
+        <actionsColumn name="actions" class="Angel\Raffle\Ui\Component\Listing\Columns\RaffleViewActions" sortOrder="200">
             <settings>
                 <indexField>entity_id</indexField>
             </settings>

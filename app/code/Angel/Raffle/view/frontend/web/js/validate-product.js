@@ -33,6 +33,8 @@ define([
             var self = this;
             var bindSubmit = this.options.bindSubmit;
             raffle.status = this.options.status;
+            raffle.totalTicket = Number.parseFloat(this.options.totalTicket);
+            raffle.totalTicketSold(Number.parseFloat(this.options.totalTicketSold));
             this.element.validation({
                 radioCheckboxClosest: this.options.radioCheckboxClosest,
 

@@ -34,6 +34,15 @@ class RaffleStatus extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSo
         ];
     }
 
+    public static function Options(){
+        return [
+            [self::PENDING => __('Pending')],
+            [self::PROCESSING => __('Processing')],
+            [self::FINISHED => __('Finished')],
+            [self::CANCELED => __('Canceled')]
+        ];
+    }
+
     /**
      * @return array
      */

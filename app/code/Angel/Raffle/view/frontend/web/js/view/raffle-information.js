@@ -19,6 +19,10 @@ define([
         },
         earnMoneyClass: ko.observable(''),
         tickets: raffle.tickets,
+        totalTicket : raffle.totalTicket,
+        availableQty: ko.computed(function () {
+            return raffle.totalTicket - raffle.totalTicketSold();
+        }),
         priceFormat : window.checkoutConfig?window.checkoutConfig.priceFormat:
             {"pattern":"$%s","precision":2,"requiredPrecision":2,"decimalSymbol":".","groupSymbol":",","groupLength":3,"integerRequired":false},
         customer: customerData.get('customer'),
@@ -38,7 +42,8 @@ define([
                 return raffle.tickets().length;
             });
             this.checkEarnMoney = ko.computed(function () {
-                var earn = self.customer().creditBalance > currentBalance?'earn-money':'lose-money';
+                var earn = self.customer().creditBalance >= currentBalance?'earn-money':'lose-money';
+                currentBalance = self.customer().creditBalance;
                 self.earnMoneyClass(earn);
                 setTimeout(function () {
                     self.earnMoneyClass('');

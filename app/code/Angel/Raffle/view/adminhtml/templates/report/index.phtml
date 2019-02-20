@@ -1,1 +1,13 @@
-Hello report/index.phtml
+<?php $product = $block->getProduct() ?>
+<ul>
+    <li>
+        <strong><?= __('Total Ticket') ?></strong>: <span><?= $product->getTotalTickets() ?></span><br/>
+    </li>
+    <li>
+        <strong><?= __('Prefix') ?></strong>: <span><?= $product->getPrefix() ?></span><br/>
+    </li>
+    <li>
+        <strong><?= __('Status') ?></strong>: <span><?= $product->getRaffleStatus() ?></span><br/>
+    </li>
+</ul>
+

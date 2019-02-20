@@ -77,13 +77,15 @@ class Raffle extends AbstractModifier
 
     protected $meta = [];
     private $prizeCollectionFactory;
+    private $raffle;
 
     public function __construct(
         LocatorInterface $locator,
         ArrayManager $arrayManager,
         ProductOptionsPrice $productOptionsPrice,
         StoreManagerInterface $storeManager,
-        CollectionFactory $prizeCollectionFactory
+        CollectionFactory $prizeCollectionFactory,
+        \Angel\Raffle\Model\Raffle $raffle
 
     ){
         $this->locator = $locator;
@@ -91,6 +93,7 @@ class Raffle extends AbstractModifier
         $this->productOptionsPrice = $productOptionsPrice;
         $this->storeManager = $storeManager;
         $this->prizeCollectionFactory = $prizeCollectionFactory;
+        $this->raffle = $raffle;
     }
 
     /**
@@ -129,13 +132,14 @@ class Raffle extends AbstractModifier
         if ($product->getTypeId() != \Angel\Raffle\Model\Product\Type\Raffle::TYPE_ID){
             return $meta;
         }
+        $this->meta = $meta;
         /** @var RaffleStatus $productTypeInstance */
         if ($product->getRaffleStatus() != RaffleStatus::PENDING) {
-            $meta = $this->disableTotalTicketAtField($meta);
-            $meta = $this->disableStatusField($meta);
+            $this->meta = $this->disableTotalTicketAtField($this->meta);
+            $this->meta = $this->disableStatusField($this->meta);
+        } else {
+            $this->createCustomOptionsPanel();
         }
-        $this->meta = $meta;
-        $this->createCustomOptionsPanel();
 
         return $this->meta;
     }
@@ -215,6 +219,7 @@ class Raffle extends AbstractModifier
                                         'data' => [
                                             'config' => [
                                                 'disabled' => true,
+                                                'notice' => __('Total Tickets sold: %1', $this->raffle->getLastTicketNumber($this->locator->getProduct()))
                                             ],
                                         ],
                                     ]
@@ -289,7 +294,6 @@ class Raffle extends AbstractModifier
                             $this->locator->getProduct()->getStoreId() ? $options : []
                         ),
                         static::FIELD_PRICE_NAME => $this->getPriceFieldConfigForSelectType(20),
-//                        static::FIELD_PRICE_TYPE_NAME => $this->getPriceTypeFieldConfig(30, ['fit' => true]),
                         static::FIELD_TOTAL_NAME => $this->getTotalFieldConfig(40),
                         static::FIELD_SORT_ORDER_NAME => $this->getPositionFieldConfig(70),
                         static::FIELD_PRIZE_ID_NAME => $this->getPrizeIdFieldConfig(80),

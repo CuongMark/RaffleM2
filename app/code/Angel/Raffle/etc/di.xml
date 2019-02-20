@@ -5,17 +5,14 @@
 	<preference for="Angel\Raffle\Api\PrizeRepositoryInterface" type="Angel\Raffle\Model\PrizeRepository"/>
 	<preference for="Angel\Raffle\Api\Data\PrizeInterface" type="Angel\Raffle\Model\Data\Prize"/>
 	<preference for="Angel\Raffle\Api\Data\PrizeSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
-	<virtualType name="Angel\Raffle\Model\ResourceModel\Prize\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-		<arguments>
-			<argument name="mainTable" xsi:type="string">angel_raffle_prize</argument>
-			<argument name="resourceModel" xsi:type="string">Angel\Raffle\Model\ResourceModel\Prize\Collection</argument>
-		</arguments>
-	</virtualType>
 	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
 		<arguments>
 			<argument name="collections" xsi:type="array">
 				<item name="angel_raffle_prize_listing_data_source" xsi:type="string">Angel\Raffle\Model\ResourceModel\Prize\Grid\Collection</item>
+				<item name="prize_listing_data_source" xsi:type="string">Angel\Raffle\Model\ResourceModel\Prize\Grid\Collection</item>
 				<item name="angel_raffle_ticket_listing_data_source" xsi:type="string">Angel\Raffle\Model\ResourceModel\Ticket\Grid\Collection</item>
+				<item name="ticket_listing_data_source" xsi:type="string">Angel\Raffle\Model\ResourceModel\Ticket\Grid\Collection</item>
+				<!--<item name="raffle_listing_data_source" xsi:type="string">Angel\Raffle\Model\ResourceModel\Raffle\Grid\Collection</item>-->
 			</argument>
 		</arguments>
 	</type>
@@ -25,10 +22,4 @@
 	<preference for="Angel\Raffle\Api\TicketRepositoryInterface" type="Angel\Raffle\Model\TicketRepository"/>
 	<preference for="Angel\Raffle\Api\Data\TicketInterface" type="Angel\Raffle\Model\Data\Ticket"/>
 	<preference for="Angel\Raffle\Api\Data\TicketSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
-	<virtualType name="Angel\Raffle\Model\ResourceModel\Ticket\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-		<arguments>
-			<argument name="mainTable" xsi:type="string">angel_raffle_ticket</argument>
-			<argument name="resourceModel" xsi:type="string">Angel\Raffle\Model\ResourceModel\Ticket\Collection</argument>
-		</arguments>
-	</virtualType>
 </config>
