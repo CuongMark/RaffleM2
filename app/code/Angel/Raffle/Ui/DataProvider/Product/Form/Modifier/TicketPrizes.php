@@ -11,7 +11,9 @@ namespace Angel\Raffle\Ui\DataProvider\Product\Form\Modifier;
 
 use Angel\Raffle\Model\Product\Attribute\Source\RaffleStatus;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Framework\App\RequestInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Module\Manager as ModuleManager;
@@ -48,6 +50,7 @@ class TicketPrizes extends AbstractModifier
      */
     private $moduleManager;
     private $prizes;
+    private $request;
 
     /**
      * @param LocatorInterface $locator
@@ -56,11 +59,13 @@ class TicketPrizes extends AbstractModifier
     public function __construct(
         LocatorInterface $locator,
         UrlInterface $urlBuilder,
-        Prizes $prizes
+        Prizes $prizes,
+        RequestInterface $request
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
         $this->prizes = $prizes;
+        $this->request = $request;
     }
 
     /**
@@ -132,6 +137,9 @@ class TicketPrizes extends AbstractModifier
     public function modifyData(array $data)
     {
         $productId = $this->locator->getProduct()->getId();
+        if(!$productId){
+            $productId = $this->request->getParam('id');
+        }
 
         $data[$productId][self::DATA_SOURCE_DEFAULT]['current_product_id'] = $productId;
 

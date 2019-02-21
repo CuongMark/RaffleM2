@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/** @var \Angel\Raffle\Block\Tickets\View $block */
+?>
+    <ul class="ticket-information" style="list-style: none">
+        <li><strong><?= __('Raffle') ?></strong>: <span><?= $block->getProduct()->getName() ?></span></li>
+        <li><strong><?= __('Start Ticket') ?></strong>: <span><?= $block->getTicket()->getStart() ?></span></li>
+        <li><strong><?= __('End ticket') ?></strong>: <span><?= $block->getTicket()->getEnd() ?></span></li>
+        <li><strong><?= __('Ticket Price') ?></strong>: <span><?= $block->formatPrice($block->getTicket()->getPrice()) ?></span></li>
+        <li><strong><?= __('Winning Prize') ?></strong>: <span><?= $block->formatPrice($block->getTicket()->getPrize()) ?></span></li>
+        <li><strong><?= __('Purchased Credit Transaction Id') ?></strong>: #<span><?= $block->getTicket()->getTransactionId() ?></span></li>
+        <li><strong><?= __('Pay out Credit Transaction Id') ?></strong>: #<span><?= $block->getTicket()->getPayoutTransactionId() ?></span></li>
+        <li><strong><?= __('Status') ?></strong>: <span><?= $block->getStatusLabel($block->getTicket()) ?></span></li>
+    </ul>
+    <?php $_prizes = $block->getPrizes(); ?>
+    <?php if ($_prizes && count($_prizes)): ?>
+        <h2 class="head"><?php __('Winning Prizes') ?></h2>
+        <div class="table-wrapper ticket-prize">
+            <table class="data table table-order-items history" id="my-Prizes-table">
+                <caption class="table-caption"><?= /* @escapeNotVerified */ __('Prizes') ?></caption>
+                <thead>
+                <tr>
+                    <th scope="col" class="col name"><?= /* @escapeNotVerified */ __('Name') ?></th>
+                    <th scope="col" class="col date"><?= /* @escapeNotVerified */ __('Prize') ?></th>
+                    <th scope="col" class="col date"><?= /* @escapeNotVerified */ __('Winning Number') ?></th>
+                    <th scope="col" class="col total"><?= /* @escapeNotVerified */ __('Total Prize') ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php /** @var \Angel\Raffle\Model\Prize $_prize */ ?>
+                <?php foreach ($_prizes as $_prize): ?>
+                    <tr>
+                        <td data-th="<?= $block->escapeHtml(__('Name')) ?>" class="col id"><?= /* @escapeNotVerified */ $_prize->getName() ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Prize')) ?>" class="col id"><?= /* @escapeNotVerified */ $_prize->getPrize() ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Winning Numbers')) ?>" class="col id"><?= /* @escapeNotVerified */ $_prize->getWinningNumbers() ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Total Prize')) ?>" class="col total"><?= /* @escapeNotVerified */ $block->formatPrice($_prize->getTotalWinningPrice()) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php else: ?>
+        <div class="message info empty"><span><?= /* @escapeNotVerified */ __('You have not any Prizes.') ?></span></div>
+    <?php endif ?>

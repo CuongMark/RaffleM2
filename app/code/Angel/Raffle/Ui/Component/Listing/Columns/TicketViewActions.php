@@ -14,7 +14,7 @@ namespace Angel\Raffle\Ui\Component\Listing\Columns;
 class TicketViewActions extends \Magento\Ui\Component\Listing\Columns\Column
 {
 
-    const URL_PATH_DETAILS = 'angel_raffle/ticket/view';
+    const URL_PATH_DETAILS = 'angel_raffle/ticket/detail';
     protected $urlBuilder;
 
     /**

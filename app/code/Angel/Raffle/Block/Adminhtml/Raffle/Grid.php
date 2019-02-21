@@ -100,13 +100,19 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index' => 'total_prizes',
                 'type' => 'number',
             ));
+            $this->addColumn('total_tickets', array(
+                'header' => __('Total Tickets'),
+                'width' => '50px',
+                'index' => 'total_prizes',
+                'type' => 'number',
+            ));
+            $this->addColumn('total_prize_sold', array(
+                'header' => __('Total Tickets Sold'),
+                'width' => '50px',
+                'index' => 'total_prize_sold',
+                'type' => 'number',
+            ));
 
-//            $this->addColumn('fifty_finish_at', array(
-//                'header' => __('Start At'),
-//                'align' => 'left',
-//                'index' => 'fifty_finish_at',
-//                'type' => 'datetime',
-//            ));
             $currency = $this->_storeManager->getStore()->getCurrentCurrencyCode();
             $this->addColumn('price', array(
                 'header' => __('Price'),

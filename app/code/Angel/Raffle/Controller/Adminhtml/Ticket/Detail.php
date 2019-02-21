@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Angel\Raffle\Controller\Tickets;
+namespace Angel\Raffle\Controller\Adminhtml\Ticket;
 
-class View extends \Magento\Framework\App\Action\Action
+class Detail extends \Magento\Backend\App\Action
 {
 
     protected $resultPageFactory;
@@ -11,11 +11,11 @@ class View extends \Magento\Framework\App\Action\Action
     /**
      * Constructor
      *
-     * @param \Magento\Framework\App\Action\Context  $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;
@@ -23,15 +23,14 @@ class View extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * Execute view action
+     * Index action
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        $page = $this->resultPageFactory->create();
-        $page->getConfig()->addBodyClass('page-products');
-        $page->getConfig()->getTitle()->prepend(__('Ticket Information'));
-        return $page;
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getConfig()->getTitle()->prepend(__("Ticket"));
+        return $resultPage;
     }
 }

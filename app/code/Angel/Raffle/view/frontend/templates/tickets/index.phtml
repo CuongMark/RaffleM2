@@ -41,9 +41,9 @@
                         <a href="<?= /* @escapeNotVerified */ $block->getViewUrl($_ticket) ?>" class="action view">
                             <span><?= /* @escapeNotVerified */ __('View') ?></span>
                         </a>
-                        <?php if ($_ticket->getStatus() == \Angel\Raffle\Model\Ticket\Status::STATUS_LOSE || $_ticket->getStatus() == \Angel\Raffle\Model\Ticket\Status::STATUS_CANCELED): ?>
+                        <?php if (0&&$_ticket->getStatus() == \Angel\Raffle\Model\Ticket\Status::STATUS_LOSE || $_ticket->getStatus() == \Angel\Raffle\Model\Ticket\Status::STATUS_CANCELED): ?>
                             <a href="<?= /* @escapeNotVerified */ $block->getTrashUrl($_ticket) ?>" class="action view">
-                                <span><?= /* @escapeNotVerified */ __('Move To Trash') ?></span>
+                                <span><?= /* @escapeNotVerified */ __('Trash') ?></span>
                             </a>
                         <?php endif; ?>
                     </td>

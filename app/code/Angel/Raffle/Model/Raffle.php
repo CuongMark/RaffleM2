@@ -150,6 +150,7 @@ class Raffle
     }
     /**
      * @param ResourceModel\Ticket\Collection $collection
+     * @return ResourceModel\Ticket\Collection
      */
     public function joinProductNameToTicketsCollection($collection){
         $productNameAttributeId = \Magento\Framework\App\ObjectManager::getInstance()->create('Magento\Eav\Model\Config')
@@ -180,7 +181,7 @@ class Raffle
             ['number' => $collection->getTable('angel_raffle_number')],
             'prize.prize_id = number.prize_id',
             ['numbers_generated' => 'COUNT(number.number)']
-        );
+        )->group('e.entity_id');
         return $collection;
     }
 
@@ -190,12 +191,13 @@ class Raffle
      */
     public function joinTotalPrizeWonToProductCollection($collection){
         $ticketCollection = $this->ticketCollectionFactory->create();
-        $ticketCollection->getSelect()->columns(['total_price' => 'SUM(price)', 'total_prize_won' => 'SUM(prize)'])->group('product_id');
+        $ticketCollection->getSelect()->columns(['total_price' => 'SUM(price)', 'total_prize_won' => 'SUM(prize)', 'total_ticket_sold'=> 'MAX(end)'])->group('product_id');
         $collection->getSelect()->joinLeft(
             ['ticket' => new \Zend_Db_Expr('('.$ticketCollection->getSelect()->__toString().')')],
             'ticket.product_id = e.entity_id',
-            ['total_price' => 'ticket.total_price', 'total_prize_won' => 'ticket.total_prize_won']
+            ['total_price' => 'ticket.total_price', 'total_prize_won' => 'ticket.total_prize_won', 'total_ticket_sold' => 'ticket.total_ticket_sold']
         );
+        return $collection;
     }
 
     /**
@@ -215,15 +217,22 @@ class Raffle
 
     /**
      * @param PrizeCollection $collection
+     * @param \Angel\Raffle\Model\Data\Ticket $ticket
      * @return mixed
      */
-    public function joinTotalWinningNumbersToPrizeCollection($collection){
+    public function joinTotalWinningNumbersToPrizeCollection($collection, $ticket = null){
         /** @var NumberCollection $collection */
         $numberCollection = $this->numberCollectionFactory->create();
         $numberCollection->getSelect()->columns([
             'winning_numbers' => 'GROUP_CONCAT(number,\' \')',
             'total_winning_numbers' => 'COUNT(number)'
         ])->group('prize_id');
+
+        if ($ticket){
+            $numberCollection->addFieldToFilter('number', ['gteq' => $ticket->getStart()])
+            ->addFieldToFilter('number', ['lteq' => $ticket->getEnd()]);
+        }
+
         $collection->getSelect()->joinLeft(
             ['number' => new \Zend_Db_Expr('('.$numberCollection->getSelect()->__toString().')')],
             'main_table.prize_id = number.prize_id',

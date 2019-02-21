@@ -55,5 +55,6 @@ class BlockHtmlTopmenuGethtmlBefore implements \Magento\Framework\Event\Observer
         ];
         $processing = new Node($data, 'id', $tree, $node);
         $node->addChild($processing);
+
     }
 }

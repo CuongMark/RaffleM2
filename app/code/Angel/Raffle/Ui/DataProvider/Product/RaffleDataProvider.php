@@ -48,7 +48,7 @@ class RaffleDataProvider extends \Magento\Catalog\Ui\DataProvider\Product\Produc
     public function getData()
     {
         $this->getCollection()->addAttributeToFilter('type_id', ['in' => [Raffle::TYPE_ID]]);
-        $this->getCollection()->addAttributeToSelect(['raffle_status', 'total_ticket' ,'prefix']);
+        $this->getCollection()->addAttributeToSelect(['raffle_status', 'total_tickets' ,'prefix']);
         $this->raffle->joinTotalPrizeToProductCollection($this->getCollection());
         $this->raffle->joinTotalPrizeWonToProductCollection($this->getCollection());
         if (!$this->getCollection()->isLoaded()) {

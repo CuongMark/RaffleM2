@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<page layout="admin-1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <head>
+        <css src="Angel_Raffle::css/viewTickets.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Angel\Raffle\Block\Adminhtml\Ticket\View" name="ticket.view" template="Angel_Raffle::tickets/view.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

@@ -11,14 +11,17 @@
 
 namespace Angel\Raffle\Block\Tickets;
 
+use Angel\Raffle\Api\TicketRepositoryInterface;
+use Angel\Raffle\Model\Data\Ticket;
 use Angel\Raffle\Model\Raffle;
 use Angel\Raffle\Model\ResourceModel\Ticket\Collection;
 use Angel\Raffle\Model\ResourceModel\Ticket\CollectionFactory;
 use Angel\Raffle\Model\Ticket\Status;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
-class Index extends \Magento\Framework\View\Element\Template
+class View extends \Magento\Framework\View\Element\Template
 {
 
     /**
@@ -46,6 +49,15 @@ class Index extends \Magento\Framework\View\Element\Template
      * @var Raffle
      */
     private $raffle;
+    private $prizeCollectionFactory;
+    private $ticketRepository;
+
+    /**
+     * @var Ticket
+     */
+    protected $ticket;
+    private $productRepository;
+    protected $product;
 
     /**
      * Constructor
@@ -59,6 +71,9 @@ class Index extends \Magento\Framework\View\Element\Template
         Session $customerSession,
         PriceCurrencyInterface $priceCurrency,
         Raffle $raffle,
+        \Angel\Raffle\Model\ResourceModel\Prize\CollectionFactory $prizeCollectionFactory,
+        TicketRepositoryInterface $ticketRepository,
+        ProductRepository $productRepository,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -66,6 +81,21 @@ class Index extends \Magento\Framework\View\Element\Template
         $this->_customerSession = $customerSession;
         $this->priceCurrency = $priceCurrency;
         $this->raffle = $raffle;
+        $this->prizeCollectionFactory = $prizeCollectionFactory;
+        $this->ticketRepository = $ticketRepository;
+        $this->productRepository = $productRepository;
+    }
+
+    /**
+     * @return \Angel\Raffle\Api\Data\TicketInterface|Ticket
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getTicket()
+    {
+        if (!$this->ticket) {
+            $this->ticket = $this->ticketRepository->getById($this->getRequest()->getParam('id'));
+        }
+        return $this->ticket;
     }
 
     /**
@@ -74,17 +104,28 @@ class Index extends \Magento\Framework\View\Element\Template
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        if ($this->getTickets()) {
+        if ($this->getPrizes()) {
             $pager = $this->getLayout()->createBlock(
                 \Magento\Theme\Block\Html\Pager::class,
                 'sales.tickets.pager'
             )->setCollection(
-                $this->getTickets()
+                $this->getPrizes()
             );
             $this->setChild('pager', $pager);
-            $this->getTickets()->load();
+            $this->getPrizes()->load();
         }
         return $this;
+    }
+
+    public function getProduct(){
+        if (!$this->product) {
+            $this->product = $this->productRepository->getById($this->getTicket()->getProductId());
+        }
+        return $this->product;
+    }
+
+    public function isOwnerTicket(){
+        return $this->_customerSession->getCustomerId() == $this->getTicket()->getCustomerId();
     }
 
     /**
@@ -96,39 +137,18 @@ class Index extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return Collection
+     * @return \Angel\Raffle\Model\ResourceModel\Prize\Collection|array
      */
-    public function getTickets()
-    {
-        if (!$this->ticketCollection) {
-            /** @var Collection $ticketCollection */
-            $ticketCollection = $this->ticketCollectionFactory->create();
-            $ticketCollection->addFieldToFilter('customer_id', $this->_customerSession->getCustomerId());
-            $ticketCollection->addFieldToFilter('main_table.status', ['neq' => \Angel\Raffle\Model\Ticket\Status::STATUS_CANCELED]);
-            $ticketCollection->setOrder('ticket_id');
-            $this->raffle->joinTotalWinningNumbersToTicketsCollection($ticketCollection);
-            $this->ticketCollection = $ticketCollection;
+    public function getPrizes(){
+        try {
+            $collection = $this->prizeCollectionFactory->create();
+            $collection->addFieldToFilter('product_id', $this->getTicket()->getProductId());
+            $this->raffle->joinTotalWinningNumbersToPrizeCollection($collection, $this->getTicket());
+            $collection->getSelect()->where('number.winning_numbers IS NOT NULL');
+            return $collection;
+        } catch (\Exception $e){
+            return [];
         }
-        return $this->ticketCollection;
-    }
-
-
-    /**
-     * @param object $ticket
-     * @return string
-     */
-    public function getViewUrl($ticket)
-    {
-        return $this->getUrl('raffle/tickets/view', ['id' => $ticket->getId()]);
-    }
-
-    /**
-     * @param object $ticket
-     * @return string
-     */
-    public function getTrashUrl($ticket)
-    {
-        return $this->getUrl('raffle/index/trash', ['id' => $ticket->getId()]);
     }
 
     /**
