@@ -22,10 +22,11 @@ define([
         tickets: raffle.tickets,
         totalTicket : raffle.totalTicket,
         availableQty: ko.computed(function () {
-            return raffle.totalTicket() - raffle.totalTicketSold();
+            var availableQty = raffle.totalTicket() - raffle.totalTicketSold();
+            return availableQty;
         }),
         getViewUrl: function(id){
-            return urlBuilder.build('raffle/ticket/view/id/' + id);
+            return urlBuilder.build('raffle/tickets/view/id/' + id);
         },
         priceFormat : window.checkoutConfig?window.checkoutConfig.priceFormat:
             {"pattern":"$%s","precision":2,"requiredPrecision":2,"decimalSymbol":".","groupSymbol":",","groupLength":3,"integerRequired":false},

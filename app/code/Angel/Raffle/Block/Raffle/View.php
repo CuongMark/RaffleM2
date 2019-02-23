@@ -35,6 +35,11 @@ class View extends \Magento\Catalog\Block\Product\View
     }
 
     public function getPrizes(){
-        return $this->raffle->getPrizes($this->getProduct());
+        $prizes = $this->raffle->getPrizes($this->getProduct());
+        return $this->raffle->joinTotalWinningNumbersToPrizeCollection($prizes);
+    }
+
+    public function formatPrice($price){
+        return $this->priceCurrency->format($price);
     }
 }

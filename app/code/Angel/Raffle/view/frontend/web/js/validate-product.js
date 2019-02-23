@@ -10,8 +10,9 @@ define([
     'Angel_Raffle/js/action/purchase-tickets',
     'Angel_Raffle/js/model/raffle',
     'Magento_Customer/js/customer-data',
+    'Magento_Ui/js/modal/confirm',
     'mage/validation'
-], function ($, ko, mage, validation, purchaseAction, raffle, customerData) {
+], function ($, ko, mage, validation, purchaseAction, raffle, customerData, confirmation) {
     'use strict';
 
     $.widget('raffle.purchaseTicket', {
@@ -24,6 +25,32 @@ define([
             var customer = customerData.get('customer');
             return customer && customer().firstname;
         },
+        submitPurchaseRequest : function (form) {
+            var self = this;
+            if (!self.isLoggedIn()){
+                window.location.href = self.options.loginUrl;
+                return false;
+            }
+            if (self.isLoading()){
+                return false;
+            }
+            var formElement = $('#'+form.id),
+                formDataArray = formElement.serializeArray();
+            var purchaseData = {};
+            formDataArray.forEach(function (entry) {
+                if (entry.value)
+                    purchaseData[entry.name] = entry.value;
+            });
+
+            if (formElement.validation() &&
+                formElement.validation('isValid')
+            ) {
+                self.isLoading(true);
+                $('#product-addtocart-button').addClass('disabled');
+                purchaseAction(purchaseData);
+            }
+            return false;
+        },
 
         /**
          * Uses Magento's validation widget for the form object.
@@ -35,6 +62,7 @@ define([
             raffle.status = this.options.status;
             raffle.totalTicket(Number.parseFloat(this.options.totalTicket));
             raffle.totalTicketSold(Number.parseFloat(this.options.totalTicketSold));
+
             this.element.validation({
                 radioCheckboxClosest: this.options.radioCheckboxClosest,
 
@@ -44,29 +72,19 @@ define([
                  * @returns {Boolean}
                  */
                 submitHandler: function (form) {
-                    if (!self.isLoggedIn()){
-                        window.location.href = self.options.loginUrl;
-                        return false;
-                    }
-                    if (self.isLoading()){
-                        return false;
-                    }
-                    var formElement = $('#'+form.id),
-                        formDataArray = formElement.serializeArray();
-                    var purchaseData = {};
-                    formDataArray.forEach(function (entry) {
-                        if (entry.value)
-                            purchaseData[entry.name] = entry.value;
+                    confirmation({
+                        title: 'Accept Purchase',
+                        content: 'Are you sure to purchase '+ $('#qty').val() +' tickets?',
+                        actions: {
+                            confirm: function () {
+                                self.submitPurchaseRequest(form);
+                                return false;
+                            },
+                            cancel: function () {
+                                return false;
+                            }
+                        }
                     });
-
-                    if (formElement.validation() &&
-                        formElement.validation('isValid')
-                    ) {
-                        self.isLoading(true);
-                        $('#product-addtocart-button').addClass('disabled');
-                        purchaseAction(purchaseData);
-                    }
-                    return false;
                 }
             });
             purchaseAction.registerPurchaseCallback(function () {

@@ -54,10 +54,10 @@ class Raffle
 
     /**
      * @param Product $product
-     * @return Collection
+     * @return TicketCollection
      */
     public function getTickets($product){
-        /** @var Collection $collection */
+        /** @var TicketCollection $collection */
         $collection = $this->ticketCollectionFactory->create();
         $collection->addFieldToFilter('product_id', $product->getId());
         return $collection;
@@ -73,11 +73,22 @@ class Raffle
     }
 
     /**
-     * @param Product $product
+     * @param $product
+     * @return PrizeCollection
      */
     public function getPrizes($product){
         return $prizesCollection = $this->prizeCollectionFactory->create()
             ->addFieldToFilter('product_id', $product->getId());
+    }
+
+    public function getTotalPrizes($product){
+        $prizes = $this->getPrizes($product);
+        $totalPrizes = 0;
+        /** @var \Angel\Raffle\Model\Data\Prize $prize */
+        foreach ($prizes as $prize){
+            $totalPrizes += (int)$prize->getTotal();
+        }
+        return $totalPrizes;
     }
 
     /**
@@ -91,13 +102,17 @@ class Raffle
         $prizeCollection = $this->prizeCollectionFactory->create();
         $prizeCollection->addFieldToFilter('product_id', $product->getid());
         $this->joinTotalWinningNumbersToPrizeCollection($prizeCollection);
+        $prizes = $prizeCollection->getItems();
+        shuffle($prizes);
         $totalTickets = (int)$product->getTotalTickets();
 
         $existed = [];
+        $totalTicketNumber = $ticket->getEnd() - $ticket->getStart() + 1;
+        $count = 0;
         $winningNumbers = [];
         $winningPrize = 0;
         /** @var \Angel\Raffle\Model\Data\Prize $prize */
-        foreach ($prizeCollection as $prize){
+        foreach ($prizes as $prize){
             for ($i=0; $i<$prize->getTotalPrizeLeft(); $i++){
                 $number = $this->getRandomNumber($ticket->getStart(), $totalTickets, $existed);
                 if ($number >= $ticket->getStart() && $number <= $ticket->getEnd()){
@@ -108,7 +123,18 @@ class Raffle
                     $this->numberRepository->save($winningNumberObject);
                     $winningNumbers[] = $number;
                     $winningPrize += $prize->getPrize();
+
+                    /** break if win all of number */
+                    $count++;
+                    if ($totalTicketNumber <= $count){
+                        break;
+                    }
                 }
+            }
+
+            /** break if win all of number */
+            if ($totalTicketNumber <= $count){
+                break;
             }
         }
         if (count($winningNumbers)){
@@ -169,19 +195,28 @@ class Raffle
     public function joinTotalPrizeToProductCollection($collection){
         $prizeCollection = $this->prizeCollectionFactory->create();
         $prizeCollection->getSelect()->columns([
-            'total_prizes' => 'SUM(total)',
-            'total_prizes_price' => 'SUM(total * prize)'
-        ])->group('product_id');
+            'total_prizes' => 'SUM(main_table.total)',
+            'total_prizes_price' => 'SUM(main_table.total * main_table.prize)'
+        ])->group('main_table.product_id');
+
+        $secondPrizeCollection = $this->prizeCollectionFactory->create();
+        $secondPrizeCollection->getSelect()->joinLeft(
+            ['number' => $secondPrizeCollection->getTable('angel_raffle_number')],
+            'main_table.prize_id = number.prize_id',
+            ['numbers_generated' => 'COUNT(number.number)']
+        )->group('product_id');
+
+        $prizeCollection->getSelect()->joinLeft(
+            ['second_prize' => new \Zend_Db_Expr('('.$secondPrizeCollection->getSelect()->__toString().')')],
+            'main_table.prize_id = second_prize.prize_id',
+            ['numbers_generated' => 'second_prize.numbers_generated']
+        );
+
         $collection->getSelect()->joinLeft(
             ['prize' => new \Zend_Db_Expr('('.$prizeCollection->getSelect()->__toString().')')],
             'prize.product_id = e.entity_id',
-            ['total_prizes' => 'prize.total_prizes', 'total_prizes_price' => 'prize.total_prizes_price']
+            ['total_prizes' => 'prize.total_prizes', 'total_prizes_price' => 'prize.total_prizes_price', 'numbers_generated' => 'prize.numbers_generated']
         );
-        $collection->getSelect()->joinLeft(
-            ['number' => $collection->getTable('angel_raffle_number')],
-            'prize.prize_id = number.prize_id',
-            ['numbers_generated' => 'COUNT(number.number)']
-        )->group('e.entity_id');
         return $collection;
     }
 
@@ -191,11 +226,11 @@ class Raffle
      */
     public function joinTotalPrizeWonToProductCollection($collection){
         $ticketCollection = $this->ticketCollectionFactory->create();
-        $ticketCollection->getSelect()->columns(['total_price' => 'SUM(price)', 'total_prize_won' => 'SUM(prize)', 'total_ticket_sold'=> 'MAX(end)'])->group('product_id');
+        $ticketCollection->getSelect()->columns(['total_price' => 'SUM(price)', 'total_prize_won' => 'SUM(prize)', 'total_tickets_sold'=> 'MAX(end)'])->group('product_id');
         $collection->getSelect()->joinLeft(
             ['ticket' => new \Zend_Db_Expr('('.$ticketCollection->getSelect()->__toString().')')],
             'ticket.product_id = e.entity_id',
-            ['total_price' => 'ticket.total_price', 'total_prize_won' => 'ticket.total_prize_won', 'total_ticket_sold' => 'ticket.total_ticket_sold']
+            ['total_price' => 'ticket.total_price', 'total_prize_won' => 'ticket.total_prize_won', 'total_tickets_sold' => 'ticket.total_tickets_sold']
         );
         return $collection;
     }
@@ -206,7 +241,7 @@ class Raffle
      * @param array $existed
      * @return int
      */
-    private function getRandomNumber($start, $end, &$existed){
+    public function getRandomNumber($start, $end, &$existed){
         $number = mt_rand($start, $end);
         while (in_array($number, $existed)){
             $number = mt_rand($start, $end);

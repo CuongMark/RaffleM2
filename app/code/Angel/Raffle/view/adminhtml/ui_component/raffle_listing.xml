@@ -145,7 +145,7 @@
                 <label translate="true">Total Tickets</label>
             </settings>
         </column>
-        <column name="total_ticket_sold" sortOrder="50">
+        <column name="total_tickets_sold" sortOrder="50">
             <settings>
                 <filter>text</filter>
                 <label translate="true">Total Tickets Sold</label>
