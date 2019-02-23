@@ -7,6 +7,7 @@ use Angel\Raffle\Model\Product\Attribute\Source\RaffleStatus;
 use Angel\Raffle\Model\Ticket\Status;
 use Angel\Raffle\Api\TicketRepositoryInterface;
 use Angel\Raffle\Model\Data\TicketFactory as TicketDataFactory;
+use Angel\Raffle\Model\EmailManagementFactory;
 use Magento\Catalog\Model\ProductRepository;
 
 class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterface
@@ -43,6 +44,10 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
      * @var TicketFactory
      */
     private $ticketFactory;
+    /**
+     * @var EmailManagementFactory
+     */
+    private $emailManagementFactory;
 
     public function __construct(
         TicketDataFactory $ticketDataFactory,
@@ -51,7 +56,8 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
         Raffle $raffle,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        TicketFactory $ticketFactory
+        TicketFactory $ticketFactory,
+        EmailManagementFactory $emailManagementFactory
     ){
         $this->ticketDataFactory = $ticketDataFactory;
         $this->ticketRepository = $ticketRepository;
@@ -60,6 +66,7 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
         $this->_eventManager = $eventManager;
         $this->messageManager = $messageManager;
         $this->ticketFactory = $ticketFactory;
+        $this->emailManagementFactory = $emailManagementFactory;
     }
 
     /**
@@ -106,6 +113,8 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
                 $this->productRepository->save($product->setRaffleStatus(RaffleStatus::FINISHED));
             }
             $this->messageManager->addSuccessMessage(__('You purchased %1 %2 tickets successfully.', $qty, $product->getName()));
+
+            $this->emailManagementFactory->create()->sendNewTicketEmail($product, $ticket);
 
             $_db->commit();
             return $ticket;

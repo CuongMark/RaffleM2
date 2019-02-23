@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="angel_raffle_purchase_ticket" label="Purchased raffle ticket" file="purchase-ticket.html" type="html" module="Angel_Raffle" area="frontend"/>
+</config>
