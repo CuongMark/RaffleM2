@@ -27,13 +27,6 @@ define([
         },
         submitPurchaseRequest : function (form) {
             var self = this;
-            if (!self.isLoggedIn()){
-                window.location.href = self.options.loginUrl;
-                return false;
-            }
-            if (self.isLoading()){
-                return false;
-            }
             var formElement = $('#'+form.id),
                 formDataArray = formElement.serializeArray();
             var purchaseData = {};
@@ -60,8 +53,8 @@ define([
             var self = this;
             var bindSubmit = this.options.bindSubmit;
             raffle.status = this.options.status;
-            raffle.totalTicket(Number.parseFloat(this.options.totalTicket));
-            raffle.totalTicketSold(Number.parseFloat(this.options.totalTicketSold));
+            raffle.totalTicket(parseFloat(this.options.totalTicket));
+            raffle.totalTicketSold(parseFloat(this.options.totalTicketSold));
 
             this.element.validation({
                 radioCheckboxClosest: this.options.radioCheckboxClosest,
@@ -72,6 +65,13 @@ define([
                  * @returns {Boolean}
                  */
                 submitHandler: function (form) {
+                    if (!self.isLoggedIn()){
+                        window.location.href = self.options.loginUrl;
+                        return false;
+                    }
+                    if (self.isLoading()){
+                        return false;
+                    }
                     confirmation({
                         title: 'Accept Purchase',
                         content: 'Are you sure to purchase '+ $('#qty').val() +' tickets?',

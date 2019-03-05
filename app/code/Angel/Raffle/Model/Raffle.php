@@ -243,6 +243,7 @@ class Raffle
      */
     public function getRandomNumber($start, $end, &$existed){
         $number = mt_rand($start, $end);
+        /** To make sure the winning numbers are not duplicated */
         while (in_array($number, $existed)){
             $number = mt_rand($start, $end);
         }
