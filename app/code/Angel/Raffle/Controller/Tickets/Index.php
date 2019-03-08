@@ -31,7 +31,7 @@ class Index extends \Magento\Framework\App\Action\Action
     {
         $page = $this->resultPageFactory->create();
         $page->getConfig()->addBodyClass('page-products');
-        $page->getConfig()->getTitle()->prepend(__('Tickets'));
+        $page->getConfig()->getTitle()->prepend(__('Raffle Tickets'));
         return $page;
     }
 }

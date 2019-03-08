@@ -31,7 +31,7 @@ class View extends \Magento\Framework\App\Action\Action
     {
         $page = $this->resultPageFactory->create();
         $page->getConfig()->addBodyClass('page-products');
-        $page->getConfig()->getTitle()->prepend(__('Ticket'));
+        $page->getConfig()->getTitle()->prepend(__('Raffle Ticket'));
         return $page;
     }
 }

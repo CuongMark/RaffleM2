@@ -36,25 +36,25 @@ class BlockHtmlTopmenuGethtmlBefore implements \Magento\Framework\Event\Observer
     public function execute(
         \Magento\Framework\Event\Observer $observer
     ) {
-        $menu = $observer->getMenu();
-        $tree = $menu->getTree();
-        $data = [
-            'name'      => __('Raffle'),
-            'id'        => 'raffle_menu_item',
-            'url'       => $this->urlBuilder->getUrl('raffle'),
-            'is_active' => false
-        ];
-        $node = new Node($data, 'id', $tree, $menu);
-        $menu->addChild($node);
-
-        $data = [
-            'name'      => __('Finished'),
-            'id'        => 'raffle_finished_menu_item',
-            'url'       => $this->urlBuilder->getUrl('raffle/index/finished'),
-            'is_active' => false
-        ];
-        $processing = new Node($data, 'id', $tree, $node);
-        $node->addChild($processing);
+//        $menu = $observer->getMenu();
+//        $tree = $menu->getTree();
+//        $data = [
+//            'name'      => __('Raffle'),
+//            'id'        => 'raffle_menu_item',
+//            'url'       => $this->urlBuilder->getUrl('raffle'),
+//            'is_active' => false
+//        ];
+//        $node = new Node($data, 'id', $tree, $menu);
+//        $menu->addChild($node);
+//
+//        $data = [
+//            'name'      => __('Finished'),
+//            'id'        => 'raffle_finished_menu_item',
+//            'url'       => $this->urlBuilder->getUrl('raffle/index/finished'),
+//            'is_active' => false
+//        ];
+//        $processing = new Node($data, 'id', $tree, $node);
+//        $node->addChild($processing);
 
     }
 }

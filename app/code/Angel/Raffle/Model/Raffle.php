@@ -11,6 +11,7 @@ use Angel\Raffle\Model\ResourceModel\Ticket\CollectionFactory as TicketCollectio
 use Angel\Raffle\Model\ResourceModel\Prize\CollectionFactory as PrizeCollectionFactory;
 use Angel\Raffle\Model\ResourceModel\Number\CollectionFactory as NumberCollectionFactory;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 class Raffle
 {
@@ -36,13 +37,15 @@ class Raffle
      * @var NumberRepository
      */
     private $numberRepository;
+    private $productCollectionFactory;
 
     public function __construct(
         TicketCollectionFactory $ticketCollectionFactory,
         NumberCollectionFactory $numberCollectionFactory,
         PrizeCollectionFactory $prizeCollectionFactory,
         \Angel\Raffle\Model\Data\NumberFactory $numberFactory,
-        NumberRepository $numberRepository
+        NumberRepository $numberRepository,
+        CollectionFactory $productCollectionFactory
 
     ){
         $this->ticketCollectionFactory = $ticketCollectionFactory;
@@ -50,6 +53,7 @@ class Raffle
         $this->prizeCollectionFactory = $prizeCollectionFactory;
         $this->numberFactory = $numberFactory;
         $this->numberRepository = $numberRepository;
+        $this->productCollectionFactory = $productCollectionFactory;
     }
 
     /**
@@ -153,9 +157,15 @@ class Raffle
      */
     public function joinTotalWinningNumbersToTicketsCollection($collection){
 
+        $numberCollection = $this->numberCollectionFactory->create();
+        $numberCollection->getSelect()->joinLeft(
+            ['prize' => $collection->getTable('angel_raffle_prize')],
+            'main_table.prize_id = prize.prize_id',
+            ['product_id' => 'prize.product_id']
+        );
         $collection->getSelect()->joinLeft(
-            ['number' => $collection->getTable('angel_raffle_number')],
-            'main_table.start <= number.number AND main_table.end >= number.number',
+            ['number' => new \Zend_Db_Expr('('.$numberCollection->getSelect()->__toString().')')],
+            'main_table.start <= number.number AND main_table.end >= number.number AND number.product_id = main_table.product_id',
             [
                 'winning_numbers' => 'GROUP_CONCAT(number.number, \' \')'
             ]
@@ -179,11 +189,22 @@ class Raffle
      * @return ResourceModel\Ticket\Collection
      */
     public function joinProductNameToTicketsCollection($collection){
-        $productNameAttributeId = \Magento\Framework\App\ObjectManager::getInstance()->create('Magento\Eav\Model\Config')
-            ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, \Magento\Catalog\Api\Data\ProductInterface::NAME)
-            ->getAttributeId();
-        $collection->getSelect()->joinLeft(['product_varchar' => $collection->getTable('catalog_product_entity_varchar')],
-            "product_varchar.entity_id = main_table.product_id AND product_varchar.attribute_id = $productNameAttributeId", ['product_name' => 'product_varchar.value']
+//        $productNameAttributeId = \Magento\Framework\App\ObjectManager::getInstance()->create('Magento\Eav\Model\Config')
+//            ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, \Magento\Catalog\Api\Data\ProductInterface::NAME)
+//            ->getAttributeId();
+//        $collection->getSelect()->joinLeft(['product_varchar' => $collection->getTable('catalog_product_entity_varchar')],
+//            "product_varchar.entity_id = main_table.product_id AND product_varchar.attribute_id = $productNameAttributeId",
+//            ['product_name' => 'product_varchar.value']
+//        );
+
+        $productCollection = $this->productCollectionFactory->create();
+        $productCollection->joinAttribute('name', 'catalog_product/name', 'entity_id', null, 'inner');
+        $collection->getSelect()->joinLeft(
+            ['product' => new \Zend_Db_Expr('('.$productCollection->getSelect()->__toString().')')],
+            'product.entity_id = main_table.product_id',
+            [
+                'product_name' => 'product.name'
+            ]
         );
         return $collection;
     }

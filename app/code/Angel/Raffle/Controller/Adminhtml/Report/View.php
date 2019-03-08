@@ -13,5 +13,5 @@ namespace Angel\Raffle\Controller\Adminhtml\Report;
 
 class View extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
 {
-
+    const ADMIN_RESOURCE = 'Angel_Raffle::report';
 }

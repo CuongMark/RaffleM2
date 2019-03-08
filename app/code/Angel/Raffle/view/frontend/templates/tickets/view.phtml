@@ -37,8 +37,8 @@
                 <?php foreach ($_prizes as $_prize): ?>
                     <tr>
                         <td data-th="<?= $block->escapeHtml(__('Name')) ?>" class="col id"><?= /* @escapeNotVerified */ $_prize->getName() ?></td>
-                        <td data-th="<?= $block->escapeHtml(__('Prize')) ?>" class="col id"><?= /* @escapeNotVerified */ $_prize->getPrize() ?></td>
-                        <td data-th="<?= $block->escapeHtml(__('Winning Numbers')) ?>" class="col id"><?= /* @escapeNotVerified */ $_prize->getWinningNumbers() ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Prize')) ?>" class="col id"><?= /* @escapeNotVerified */ $block->formatPrice($_prize->getPrize()) ?></td>
+                        <td style="word-break:break-all;" data-th="<?= $block->escapeHtml(__('Winning Numbers')) ?>" class="col id"><?= /* @escapeNotVerified */ $_prize->getWinningNumbers() ?></td>
                         <td data-th="<?= $block->escapeHtml(__('Total Prize')) ?>" class="col total"><?= /* @escapeNotVerified */ $block->formatPrice($_prize->getTotalWinningPrice()) ?></td>
                     </tr>
                 <?php endforeach; ?>

@@ -107,6 +107,7 @@ class Index extends \Magento\Framework\View\Element\Template
             $ticketCollection->addFieldToFilter('main_table.status', ['neq' => \Angel\Raffle\Model\Ticket\Status::STATUS_CANCELED]);
             $ticketCollection->setOrder('ticket_id');
             $this->raffle->joinTotalWinningNumbersToTicketsCollection($ticketCollection);
+            $this->raffle->joinProductNameToTicketsCollection($ticketCollection);
             $this->ticketCollection = $ticketCollection;
         }
         return $this->ticketCollection;

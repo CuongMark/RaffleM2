@@ -33,7 +33,7 @@
                     <td data-th="<?= $block->escapeHtml(__('Start Number')) ?>" class="col id"><?= /* @escapeNotVerified */ $_ticket->getStart() ?></td>
                     <td data-th="<?= $block->escapeHtml(__('End Number')) ?>" class="col id"><?= /* @escapeNotVerified */ $_ticket->getEnd() ?></td>
                     <td data-th="<?= $block->escapeHtml(__('Price')) ?>" class="col total"><?= /* @escapeNotVerified */ $block->formatPrice($_ticket->getPrice()) ?></td>
-                    <td data-th="<?= $block->escapeHtml(__('Winning Number')) ?>" class="col total"><?= /* @escapeNotVerified */ $_ticket->getWinningNumbers() ?></td>
+                    <td style="word-break:break-all;" data-th="<?= $block->escapeHtml(__('Winning Number')) ?>" class="col total"><?= /* @escapeNotVerified */ $_ticket->getWinningNumbers() ?></td>
                     <td data-th="<?= $block->escapeHtml(__('Winning Prize')) ?>" class="col total"><?= /* @escapeNotVerified */ $_ticket->getPrize()?$block->formatPrice($_ticket->getPrize()):'' ?></td>
                     <td data-th="<?= $block->escapeHtml(__('Purchased At')) ?>" class="col date"><?= /* @escapeNotVerified */ $block->formatDate($_ticket->getCreatedAt(), 2 , true) ?></td>
                     <td data-th="<?= $block->escapeHtml(__('Status')) ?>" class="col status"><?= /* @escapeNotVerified */ $block->getStatusLabel($_ticket) ?></td>

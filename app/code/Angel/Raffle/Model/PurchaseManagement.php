@@ -81,13 +81,14 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
 
             $product = $this->productRepository->getById($product_id);
             $totalTicket = $product->getData('total_tickets');
-            $qty = min($totalTicket, $qty);
+            $lastTicketNumber = $this->raffle->getLastTicketNumber($product);
+            $qty = min($totalTicket - $lastTicketNumber, $qty);
             if ($qty<=0){
                 throw new \Exception('Qty is not available');
             }
             /** @var \Angel\Raffle\Model\Data\Ticket $ticket */
             $ticket = $ticketObject->getDataModel();
-            $lastTicketNumber = $this->raffle->getLastTicketNumber($product);
+
             $ticket->setStart($lastTicketNumber + 1)
                 ->setEnd($lastTicketNumber + $qty)
                 ->setPrice($product->getPrice() * $qty)

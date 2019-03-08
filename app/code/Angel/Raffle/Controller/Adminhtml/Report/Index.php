@@ -6,6 +6,7 @@ namespace Angel\Raffle\Controller\Adminhtml\Report;
 class Index extends \Magento\Backend\App\Action
 {
 
+    const ADMIN_RESOURCE = 'Angel_Raffle::report';
     protected $resultPageFactory;
 
     /**

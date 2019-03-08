@@ -24,7 +24,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Magento_Catalog::products</aclResource>
+        <aclResource>Angel_Raffle::report</aclResource>
         <dataProvider class="Angel\Raffle\Ui\DataProvider\Product\RaffleDataProvider" name="raffle_listing_report_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>

@@ -11,9 +11,7 @@ namespace Angel\Raffle\Ui\DataProvider\Product\Form\Modifier;
 
 use Angel\Raffle\Model\Product\Attribute\Source\RaffleStatus;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Framework\App\RequestInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Module\Manager as ModuleManager;
@@ -25,12 +23,12 @@ use Magento\Framework\App\ObjectManager;
  * @api
  * @since 100.1.0
  */
-class TicketPrizes extends AbstractModifier
+class PrizesReport extends AbstractModifier
 {
-    const GROUP_TICKETS = 'tickets';
+    const GROUP_PPIZES = 'prizes';
     const GROUP_CONTENT = 'content';
     const DATA_SCOPE_REVIEW = 'grouped';
-    const SORT_ORDER = 20;
+    const SORT_ORDER = 10;
     const LINK_TYPE = 'associated';
 
     /**
@@ -49,8 +47,6 @@ class TicketPrizes extends AbstractModifier
      * @var ModuleManager
      */
     private $moduleManager;
-    private $prizes;
-    private $request;
 
     /**
      * @param LocatorInterface $locator
@@ -58,14 +54,10 @@ class TicketPrizes extends AbstractModifier
      */
     public function __construct(
         LocatorInterface $locator,
-        UrlInterface $urlBuilder,
-        PrizesReport $prizes,
-        RequestInterface $request
+        UrlInterface $urlBuilder
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
-        $this->prizes = $prizes;
-        $this->request = $request;
     }
 
     /**
@@ -74,26 +66,24 @@ class TicketPrizes extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        $meta = $this->prizes->modifyMeta($meta);
         if (!$this->locator->getProduct()->getId()
             || $this->locator->getProduct()->getTypeId() != \Angel\Raffle\Model\Product\Type\Raffle::TYPE_ID
             || $this->locator->getProduct()->getRaffleStatus() == RaffleStatus::PENDING
             || !$this->getModuleManager()->isOutputEnabled('Angel_Raffle')) {
             return $meta;
         }
-
-        $meta[static::GROUP_TICKETS] = [
+        $meta[static::GROUP_PPIZES] = [
             'children' => [
-                'ticket_listing_report' => [
+                'prize_listing' => [
                     'arguments' => [
                         'data' => [
                             'config' => [
                                 'autoRender' => true,
                                 'componentType' => 'insertListing',
-                                'dataScope' => 'ticket_listing_report',
-                                'externalProvider' => 'ticket_listing_report.ticket_listing_report_data_source',
-                                'selectionsProvider' => 'ticket_listing_report.ticket_listing_report.product_columns.ids',
-                                'ns' => 'ticket_listing_report',
+                                'dataScope' => 'prize_listing',
+                                'externalProvider' => 'prize_listing.prize_listing_data_source',
+                                'selectionsProvider' => 'prize_listing.prize_listing.product_columns.ids',
+                                'ns' => 'prize_listing',
                                 'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
                                 'realTimeLink' => false,
                                 'behaviourType' => 'simple',
@@ -112,7 +102,7 @@ class TicketPrizes extends AbstractModifier
             'arguments' => [
                 'data' => [
                     'config' => [
-                        'label' => __('Tickets'),
+                        'label' => __('Prizes'),
                         'collapsible' => true,
                         'opened' => false,
                         'componentType' => Form\Fieldset::NAME,
@@ -137,9 +127,6 @@ class TicketPrizes extends AbstractModifier
     public function modifyData(array $data)
     {
         $productId = $this->locator->getProduct()->getId();
-        if(!$productId){
-            $productId = $this->request->getParam('id');
-        }
 
         $data[$productId][self::DATA_SOURCE_DEFAULT]['current_product_id'] = $productId;
 
