@@ -19,6 +19,7 @@ define([
             template: 'Angel_Raffle/raffle-information'
         },
         earnMoneyClass: ko.observable(''),
+        updateQtyClass: ko.observable(''),
         tickets: raffle.tickets,
         totalTicket : raffle.totalTicket,
         availableQty: ko.computed(function () {
@@ -33,6 +34,30 @@ define([
         customer: customerData.get('customer'),
         formatPrice: function(price){
             return priceUtils.formatPrice(price, this.priceFormat);
+        },
+
+        autoUpdateAvailableQty: function(id){
+            var self = this;
+            if (id===0)
+                return;
+            var data_id = 0;
+            var interval = setInterval(function () {
+                $.getJSON( "pub/media/angel/raffle/raffle_" + id + ".json", function(data) {
+                    if (data.status !== "1"){
+                        clearInterval(interval);
+                    }
+                    if (data_id === 0){
+                        data_id = data.id;
+                    } else if(data.id !== data_id){
+                        data_id = data.id;
+                        raffle.totalTicketSold(data.last_ticket);
+                        self.updateQtyClass('update_qty');
+                        setTimeout(function () {
+                            self.updateQtyClass('');
+                        },5000);
+                    }
+                });
+            }, 5000);
         },
 
         /** @inheritdoc */
@@ -53,6 +78,9 @@ define([
                 setTimeout(function () {
                     self.earnMoneyClass('');
                 },5000);
+            });
+            this.autoUpdate = ko.computed(function() {
+                self.autoUpdateAvailableQty(raffle.id());
             });
         },
     });

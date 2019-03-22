@@ -57,6 +57,7 @@ if($customerSession->isLoggedIn()) {
                 "loginUrl" : "<?= $block->getUrl('customer/account/login') ?>",
                 "TicketStatus" : <?= json_encode(\Angel\Raffle\Model\Ticket\Status::getOptionArray()) ?>,
                 "totalTicket" : <?= $_product->getTotalTickets() ?>,
+                "productId" : <?= $_product->getId() ?>,
                 "totalTicketSold" : <?= $raffle->getLastTicketNumber($_product) ?>
             }
         }

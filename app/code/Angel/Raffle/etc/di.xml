@@ -10,8 +10,10 @@
 			<argument name="collections" xsi:type="array">
 				<item name="angel_raffle_prize_listing_data_source" xsi:type="string">Angel\Raffle\Model\ResourceModel\Prize\Grid\Collection</item>
 				<item name="prize_listing_data_source" xsi:type="string">Angel\Raffle\Model\ResourceModel\Prize\Grid\Collection</item>
+				<item name="prize_listing_report_data_source" xsi:type="string">Angel\Raffle\Model\ResourceModel\Prize\Grid\Collection</item>
 				<item name="angel_raffle_ticket_listing_data_source" xsi:type="string">Angel\Raffle\Model\ResourceModel\Ticket\Grid\Collection</item>
 				<item name="ticket_listing_data_source" xsi:type="string">Angel\Raffle\Model\ResourceModel\Ticket\Grid\Collection</item>
+				<item name="ticket_listing_report_data_source" xsi:type="string">Angel\Raffle\Model\ResourceModel\Ticket\Grid\Collection</item>
 				<!--<item name="raffle_listing_data_source" xsi:type="string">Angel\Raffle\Model\ResourceModel\Raffle\Grid\Collection</item>-->
 			</argument>
 		</arguments>

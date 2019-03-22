@@ -48,19 +48,19 @@
 		</column>
 		<column name="start">
 			<settings>
-				<filter>text</filter>
+				<filter>textRange</filter>
 				<label translate="true">Start</label>
 			</settings>
 		</column>
 		<column name="end">
 			<settings>
-				<filter>text</filter>
+				<filter>textRange</filter>
 				<label translate="true">End</label>
 			</settings>
 		</column>
 		<column name="winning_numbers">
 			<settings>
-				<filter>text</filter>
+				<!--<filter>text</filter>-->
 				<label translate="true">Winning Numbers</label>
 			</settings>
 		</column>

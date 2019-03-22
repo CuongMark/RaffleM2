@@ -53,6 +53,7 @@ define([
             var self = this;
             var bindSubmit = this.options.bindSubmit;
             raffle.status = this.options.status;
+            raffle.id(parseFloat(this.options.productId));
             raffle.totalTicket(parseFloat(this.options.totalTicket));
             raffle.totalTicketSold(parseFloat(this.options.totalTicketSold));
 

@@ -129,43 +129,43 @@
         </column>
         <column name="total_price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="60">
             <settings>
-                <filter>text</filter>
+                <!--<filter>textRange</filter>-->
                 <label translate="true">Total Sales</label>
             </settings>
         </column>
         <column name="total_prizes" sortOrder="60">
             <settings>
-                <filter>text</filter>
+                <!--<filter>textRange</filter>-->
                 <label translate="true">Total Prizes</label>
             </settings>
         </column>
         <column name="total_tickets" sortOrder="60">
             <settings>
-                <filter>text</filter>
+                <!--<filter>textRange</filter>-->
                 <label translate="true">Total Tickets</label>
             </settings>
         </column>
         <column name="total_tickets_sold" sortOrder="50">
             <settings>
-                <filter>text</filter>
+                <!--<filter>textRange</filter>-->
                 <label translate="true">Total Tickets Sold</label>
             </settings>
         </column>
         <column name="total_prizes_price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="60">
             <settings>
-                <filter>text</filter>
+                <!--<filter>textRange</filter>-->
                 <label translate="true">Total Prizes Price</label>
             </settings>
         </column>
         <column name="numbers_generated" sortOrder="60">
             <settings>
-                <filter>text</filter>
+                <!--<filter>textRange</filter>-->
                 <label translate="true">Total Winning Numbers Generated</label>
             </settings>
         </column>
         <column name="total_prize_won" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="60">
             <settings>
-                <filter>text</filter>
+                <!--<filter>textRange</filter>-->
                 <label translate="true">Total Prizes Won</label>
             </settings>
         </column>

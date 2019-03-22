@@ -74,16 +74,16 @@ class PrizesReport extends AbstractModifier
         }
         $meta[static::GROUP_PPIZES] = [
             'children' => [
-                'prize_listing' => [
+                'prize_listing_report' => [
                     'arguments' => [
                         'data' => [
                             'config' => [
                                 'autoRender' => true,
                                 'componentType' => 'insertListing',
-                                'dataScope' => 'prize_listing',
-                                'externalProvider' => 'prize_listing.prize_listing_data_source',
-                                'selectionsProvider' => 'prize_listing.prize_listing.product_columns.ids',
-                                'ns' => 'prize_listing',
+                                'dataScope' => 'prize_listing_report',
+                                'externalProvider' => 'prize_listing_report.prize_listing_report_data_source',
+                                'selectionsProvider' => 'prize_listing_report.prize_listing_report.product_columns.ids',
+                                'ns' => 'prize_listing_report',
                                 'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
                                 'realTimeLink' => false,
                                 'behaviourType' => 'simple',

@@ -195,6 +195,16 @@ class InstallSchema implements InstallSchemaInterface
             'Raffle Status'
         );
 
+        $table_angel_raffle_ticket->addIndex(
+            $setup->getIdxName(
+                'angel_raffle_ticket',
+                ['product_id', 'start'],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            ['product_id', 'start'],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+        );
+
         $table_angel_raffle_ticket->addForeignKey(
             $setup->getFkName('angel_raffle_ticket', 'product_id', 'catalog_product_entity', 'entity_id'),
             'product_id',

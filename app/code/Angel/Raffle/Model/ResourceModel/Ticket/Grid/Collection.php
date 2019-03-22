@@ -59,6 +59,8 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
      */
     protected function _initSelect()
     {
+        $this->addFilterToMap('customer_email', 'customer.email');
+        $this->addFilterToMap('product_name', 'product.name');
         parent::_initSelect();
         $this->_joinFields();
         $this->_addFilters();
@@ -75,7 +77,7 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
     protected function _addFilters()
     {
         if ($this->request->getParam('current_product_id'))
-            $this->addFieldToFilter('product_id', $this->request->getParam('current_product_id'));
+            $this->addFieldToFilter('main_table.product_id', $this->request->getParam('current_product_id'));
     }
 
 

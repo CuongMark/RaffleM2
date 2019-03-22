@@ -8,6 +8,7 @@ use Angel\Raffle\Model\Ticket\Status;
 use Angel\Raffle\Api\TicketRepositoryInterface;
 use Angel\Raffle\Model\Data\TicketFactory as TicketDataFactory;
 use Angel\Raffle\Model\EmailManagementFactory;
+use Angel\Raffle\Service\Files;
 use Magento\Catalog\Model\ProductRepository;
 
 class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterface
@@ -48,6 +49,7 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
      * @var EmailManagementFactory
      */
     private $emailManagementFactory;
+    private $files;
 
     public function __construct(
         TicketDataFactory $ticketDataFactory,
@@ -57,7 +59,8 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         TicketFactory $ticketFactory,
-        EmailManagementFactory $emailManagementFactory
+        EmailManagementFactory $emailManagementFactory,
+        Files $files
     ){
         $this->ticketDataFactory = $ticketDataFactory;
         $this->ticketRepository = $ticketRepository;
@@ -67,6 +70,7 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
         $this->messageManager = $messageManager;
         $this->ticketFactory = $ticketFactory;
         $this->emailManagementFactory = $emailManagementFactory;
+        $this->files = $files;
     }
 
     /**
@@ -77,7 +81,6 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
         $ticketObject = $this->ticketFactory->create();
         $_db = $ticketObject->getResource();
         try {
-            $_db->beginTransaction();
 
             $product = $this->productRepository->getById($product_id);
             $totalTicket = $product->getData('total_tickets');
@@ -96,6 +99,8 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
                 ->setProductId($product_id)
                 ->setStatus(Status::STATUS_PENDING);
 
+            $_db->beginTransaction();
+//            $ticket = $this->ticketRepository->save($ticket);
             /** create credit transaction */
             $this->_eventManager->dispatch('angel_raffle_create_new_ticket', ['ticket' => $ticket, 'product' => $product]);
 
@@ -107,21 +112,21 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
                     $this->_eventManager->dispatch('angel_raffle_winning_ticket_ticket', ['ticket' => $ticket, 'product' => $product]);
                 }
             }
-
             $ticket = $this->ticketRepository->save($ticket);
             /** update Raffle status */
             if ($ticket->getEnd() >= $totalTicket){
                 $this->productRepository->save($product->setRaffleStatus(RaffleStatus::FINISHED));
             }
+            $_db->commit();
             $this->messageManager->addSuccessMessage(__('You purchased %1 %2 tickets successfully.', $qty, $product->getName()));
 
             $this->emailManagementFactory->create()->sendNewTicketEmail($product, $ticket);
 
-            $_db->commit();
+            $this->files->createFile(['last_ticket' => $ticket->getEnd(), 'status' => $product->getRaffleStatus()], $product->getId());
             return $ticket;
         } catch (\Exception $e){
-            $this->messageManager->addErrorMessage($e->getMessage());
             $_db->rollBack();
+            $this->messageManager->addErrorMessage($e->getMessage());
         }
         return $ticketObject->getDataModel();
     }

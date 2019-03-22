@@ -6,7 +6,10 @@
 }
 .earn-money{
     background-color: green;
+    font-weight: bold;
 }
-.lose-money{
+.lose-money, .update_qty{
     background-color: indianred;
+    color: #eae5e5;
+    font-weight: bold;
 }

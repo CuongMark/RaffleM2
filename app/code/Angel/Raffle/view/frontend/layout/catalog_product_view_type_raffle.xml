@@ -13,5 +13,6 @@
                 <argument name="template" xsi:type="string">Angel_Raffle::product/addtocart.phtml</argument>
             </action>
         </referenceBlock>
+        <referenceBlock name="reviews.tab" remove="true" />
     </body>
 </page>

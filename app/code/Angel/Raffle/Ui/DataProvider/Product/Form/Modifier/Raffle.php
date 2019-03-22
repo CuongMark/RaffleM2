@@ -109,16 +109,20 @@ class Raffle extends AbstractModifier
         }
         $collection = $this->prizeCollectionFactory->create()->addFieldToFilter('product_id', $product->getId());
 
-        return array_replace_recursive(
+        $data =  array_replace_recursive(
             $data,
             [
                 $this->locator->getProduct()->getId() => [
                     static::DATA_SOURCE_DEFAULT => [
                         static::GRID_PRIZE_NAME => $collection->getData(),
+                        'quantity_and_stock_status' => [
+                            'qty' => (int)$product->getTotalTickets() - $this->raffle->getLastTicketNumber($this->locator->getProduct())
+                        ]
                     ]
                 ]
             ]
         );
+        return $data;
     }
 
     /**
@@ -140,6 +144,7 @@ class Raffle extends AbstractModifier
         } else {
             $this->createCustomOptionsPanel();
         }
+        $this->meta = $this->hideQtyField($this->meta);
 
         return $this->meta;
     }
@@ -219,7 +224,40 @@ class Raffle extends AbstractModifier
                                         'data' => [
                                             'config' => [
                                                 'disabled' => true,
-                                                'notice' => __('Total Tickets sold: %1', $this->raffle->getLastTicketNumber($this->locator->getProduct()))
+                                                'notice' => __('Total Tickets sold: %1', $this->raffle->getLastTicketNumber($this->locator->getProduct())),
+                                            ],
+                                        ],
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        );
+        return $meta;
+    }
+
+    protected function hideQtyField(array $meta){
+        $meta = array_replace_recursive(
+            $meta,
+            [
+                'product-details' => [
+                    'children' => [
+                        'quantity_and_stock_status_qty' => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'disabled' => true
+                                    ]
+                                ]
+                            ],
+                            'children' => [
+                                'qty' =>[
+                                    'arguments' => [
+                                        'data' => [
+                                            'config' => [
+                                                'disabled' => true
                                             ],
                                         ],
                                     ]
