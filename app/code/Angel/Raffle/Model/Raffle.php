@@ -3,6 +3,7 @@
 
 namespace Angel\Raffle\Model;
 
+use Angel\Core\Model\RandomNumberGenerate;
 use Angel\Raffle\Model\Ticket\Status;
 use Angel\Raffle\Model\ResourceModel\Ticket\Collection as TicketCollection;
 use Angel\Raffle\Model\ResourceModel\Prize\Collection as PrizeCollection;
@@ -100,6 +101,7 @@ class Raffle
      * @param \Angel\Raffle\Model\Data\Ticket $ticket
      * @return \Angel\Raffle\Model\Data\Ticket
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      */
     public function generateWinningNumber($product, $ticket){
         /** @var PrizeCollection $prizeCollection */
@@ -118,7 +120,9 @@ class Raffle
         /** @var \Angel\Raffle\Model\Data\Prize $prize */
         foreach ($prizes as $prize){
             for ($i=0; $i<$prize->getTotalPrizeLeft(); $i++){
-                $number = $this->getRandomNumber($ticket->getStart(), $totalTickets, $existed);
+
+                $number = RandomNumberGenerate::getRandomNumber($ticket->getStart(), $totalTickets, $existed);
+
                 if ($number >= $ticket->getStart() && $number <= $ticket->getEnd()){
                     /** @var \Angel\Raffle\Model\Data\Number $winningNumberObject */
                     $winningNumberObject = $this->numberFactory->create();
@@ -261,12 +265,13 @@ class Raffle
      * @param int $end
      * @param array $existed
      * @return int
+     * @throws \Exception
      */
     public function getRandomNumber($start, $end, &$existed){
-        $number = mt_rand($start, $end);
+        $number = random_int($start, $end);
         /** To make sure the winning numbers are not duplicated */
         while (in_array($number, $existed)){
-            $number = mt_rand($start, $end);
+            $number = random_int($start, $end);
         }
         $existed[] = $number;
         return $number;
