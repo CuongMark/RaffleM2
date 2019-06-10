@@ -141,12 +141,40 @@ class Raffle extends AbstractModifier
         if ($product->getRaffleStatus() != RaffleStatus::PENDING) {
             $this->meta = $this->disableTotalTicketAtField($this->meta);
             $this->meta = $this->disableStatusField($this->meta);
+            $this->meta = $this->disablePriceField($this->meta);
         } else {
             $this->createCustomOptionsPanel();
         }
         $this->meta = $this->hideQtyField($this->meta);
 
         return $this->meta;
+    }
+
+
+    protected function disablePriceField(array $meta){
+        $meta = array_replace_recursive(
+            $meta,
+            [
+                'product-details' => [
+                    'children' => [
+                        'container_price' => [
+                            'children' => [
+                                'price' =>[
+                                    'arguments' => [
+                                        'data' => [
+                                            'config' => [
+                                                'disabled' => true,
+                                            ],
+                                        ],
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        );
+        return $meta;
     }
 
     /**

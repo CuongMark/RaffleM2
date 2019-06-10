@@ -38,7 +38,7 @@
             <argument name="modifiers" xsi:type="array">
                 <item name="raffle_prizes" xsi:type="array">
                     <item name="class" xsi:type="string">Angel\Raffle\Ui\DataProvider\Product\Form\Modifier\TicketPrizes</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="sortOrder" xsi:type="number">1000</item>
                 </item>
             </argument>
         </arguments>

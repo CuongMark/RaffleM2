@@ -8,6 +8,8 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <referenceContainer name="content">
         <block class="Angel\Raffle\Block\Adminhtml\Report\Index" name="report.index" template="Angel_Raffle::report/index.phtml"/>
-        <uiComponent name="raffle_view"/>
+        <block class="Angel\Raffle\Block\Adminhtml\Raffle\Details\Ticket" name="Raffle.ticket.container"/>
+        <block class="Angel\Raffle\Block\Adminhtml\Raffle\Details\Prize" name="Raffle.prize.container"/>
+<!--        <uiComponent name="raffle_view"/>-->
     </referenceContainer>
 </layout>

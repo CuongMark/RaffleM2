@@ -1,3 +1,6 @@
+<!-- ko if: availableQty == '0' -->
+<h2 data-bind="i18n:'The tickets have all been sold'"></h2>
+<!--/ko-->
 <strong data-bind="i18n:'Your credit'"></strong>: <span data-bind="text: customerCreditFormated, attr: {class: earnMoneyClass }"></span><br/>
 <strong data-bind="i18n:'Total Tickets'"></strong>: <span data-bind="text: totalTicket"></span><br/>
 <strong data-bind="i18n:'Avalable Qty'"></strong>: <span data-bind="text: availableQty, attr: {class: updateQtyClass}"></span>

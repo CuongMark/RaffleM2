@@ -18,7 +18,7 @@
         <aclResource>Angel_Raffle::report</aclResource>
         <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="ticket_listing_report_data_source">
             <settings>
-                <requestFieldName>id</requestFieldName>
+                <requestFieldName>ticket_id</requestFieldName>
                 <primaryFieldName>ticket_id</primaryFieldName>
             </settings>
         </dataProvider>
