@@ -119,15 +119,19 @@ class Raffle
         $winningPrize = 0;
         /** @var \Angel\Raffle\Model\Data\Prize $prize */
         foreach ($prizes as $prize){
-            for ($i=0; $i<$prize->getTotalPrizeLeft(); $i++){
+            $prizeLeft = (int)$prize->getTotalPrizeLeft();
+            $prizeCount = $prize->getTotal() - $prizeLeft;
+            for ($i=0; $i < $prizeLeft; $i++){
 
                 $number = RandomNumberGenerate::getRandomNumber($ticket->getStart(), $totalTickets, $existed);
 
                 if ($number >= $ticket->getStart() && $number <= $ticket->getEnd()){
+                    $prizeCount ++;
                     /** @var \Angel\Raffle\Model\Data\Number $winningNumberObject */
                     $winningNumberObject = $this->numberFactory->create();
                     $winningNumberObject->setNumber($number)
-                        ->setPrizeId($prize->getPrizeId());
+                        ->setPrizeId($prize->getPrizeId())
+                        ->setCount($prizeCount);
                     $this->numberRepository->save($winningNumberObject);
                     $winningNumbers[] = $number;
                     $winningPrize += $prize->getPrize();
@@ -188,19 +192,13 @@ class Raffle
             ]
         );
     }
+
     /**
-     * @param ResourceModel\Ticket\Collection $collection
-     * @return ResourceModel\Ticket\Collection
+     * @param $collection
+     * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function joinProductNameToTicketsCollection($collection){
-//        $productNameAttributeId = \Magento\Framework\App\ObjectManager::getInstance()->create('Magento\Eav\Model\Config')
-//            ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, \Magento\Catalog\Api\Data\ProductInterface::NAME)
-//            ->getAttributeId();
-//        $collection->getSelect()->joinLeft(['product_varchar' => $collection->getTable('catalog_product_entity_varchar')],
-//            "product_varchar.entity_id = main_table.product_id AND product_varchar.attribute_id = $productNameAttributeId",
-//            ['product_name' => 'product_varchar.value']
-//        );
-
         $productCollection = $this->productCollectionFactory->create();
         $productCollection->joinAttribute('name', 'catalog_product/name', 'entity_id', null, 'inner');
         $collection->getSelect()->joinLeft(

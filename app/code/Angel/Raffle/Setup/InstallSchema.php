@@ -96,6 +96,24 @@ class InstallSchema implements InstallSchemaInterface
             'Winning Number'
         );
 
+        $table_angel_raffle_number->addColumn(
+            'count',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['nullable' => false,'unsigned' => true],
+            'The position of prize'
+        );
+
+        $table_angel_raffle_number->addIndex(
+            $setup->getIdxName(
+                'angel_raffle_number',
+                ['prize_id', 'count'],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            ['prize_id', 'count'],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+        );
+
         $table_angel_raffle_number->addForeignKey(
             $setup->getFkName('angel_raffle_number', 'prize_id', 'angel_raffle_prize', 'prize_id'),
             'prize_id',

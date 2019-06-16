@@ -8,6 +8,7 @@ interface NumberInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     const PRIZE_ID = 'prize_id';
     const NUMBER = 'number';
+    const COUNT = 'count';
     const NUMBER_ID = 'number_id';
 
     /**
@@ -63,4 +64,16 @@ interface NumberInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return \Angel\Raffle\Api\Data\NumberInterface
      */
     public function setNumber($number);
+    /**
+     * Get count
+     * @return int|null
+     */
+    public function getCount();
+
+    /**
+     * Set count
+     * @param int $number
+     * @return \Angel\Raffle\Api\Data\NumberInterface
+     */
+    public function setCount($number);
 }

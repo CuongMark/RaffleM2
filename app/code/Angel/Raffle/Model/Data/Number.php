@@ -68,7 +68,7 @@ class Number extends \Magento\Framework\Api\AbstractExtensibleObject implements 
 
     /**
      * Get number
-     * @return string|null
+     * @return int|null
      */
     public function getNumber()
     {
@@ -77,11 +77,30 @@ class Number extends \Magento\Framework\Api\AbstractExtensibleObject implements 
 
     /**
      * Set number
-     * @param string $number
+     * @param int $number
      * @return \Angel\Raffle\Api\Data\NumberInterface
      */
     public function setNumber($number)
     {
         return $this->setData(self::NUMBER, $number);
+    }
+
+    /**
+     * Get count
+     * @return int|null
+     */
+    public function getCount()
+    {
+        return $this->_get(self::COUNT);
+    }
+
+    /**
+     * Set count
+     * @param int $number
+     * @return \Angel\Raffle\Api\Data\NumberInterface
+     */
+    public function setCount($count)
+    {
+        return $this->setData(self::COUNT, $count);
     }
 }

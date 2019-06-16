@@ -37,6 +37,9 @@ if($customerSession->isLoggedIn()) {
                         />
                     </div>
                 </div>
+                <div id="customerCredit" data-bind="scope:'customerCredit'">
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                </div>
             <?php endif; ?>
             <div class="actions">
                 <button type="submit"
@@ -64,3 +67,16 @@ if($customerSession->isLoggedIn()) {
     }
 </script>
 <?= $block->getChildHtml('prize.block') ?>
+<script type="text/x-magento-init">
+    {
+        "#customerCredit": {
+            "Magento_Ui/js/core/app": {
+                "components" : {
+                    "customerCredit" : {
+                        "component": "Magestore_Customercredit/js/view/current-credit-balance"
+                    }
+                }
+            }
+        }
+    }
+</script>

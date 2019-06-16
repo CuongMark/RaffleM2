@@ -10,7 +10,7 @@ class Prize extends \Magento\Framework\Api\AbstractExtensibleObject implements P
 
     /**
      * Get prize_id
-     * @return string|null
+     * @return int|null
      */
     public function getPrizeId()
     {
@@ -19,7 +19,7 @@ class Prize extends \Magento\Framework\Api\AbstractExtensibleObject implements P
 
     /**
      * Set prize_id
-     * @param string $prizeId
+     * @param int $prizeId
      * @return \Angel\Raffle\Api\Data\PrizeInterface
      */
     public function setPrizeId($prizeId)
@@ -29,7 +29,7 @@ class Prize extends \Magento\Framework\Api\AbstractExtensibleObject implements P
 
     /**
      * Get product_id
-     * @return string|null
+     * @return int|null
      */
     public function getProductId()
     {
@@ -38,7 +38,7 @@ class Prize extends \Magento\Framework\Api\AbstractExtensibleObject implements P
 
     /**
      * Set product_id
-     * @param string $productId
+     * @param int $productId
      * @return \Angel\Raffle\Api\Data\PrizeInterface
      */
     public function setProductId($productId)
@@ -87,7 +87,7 @@ class Prize extends \Magento\Framework\Api\AbstractExtensibleObject implements P
 
     /**
      * Get prize
-     * @return string|null
+     * @return float|null
      */
     public function getPrize()
     {
@@ -96,7 +96,7 @@ class Prize extends \Magento\Framework\Api\AbstractExtensibleObject implements P
 
     /**
      * Set prize
-     * @param string $prize
+     * @param float $prize
      * @return \Angel\Raffle\Api\Data\PrizeInterface
      */
     public function setPrize($prize)
@@ -106,7 +106,7 @@ class Prize extends \Magento\Framework\Api\AbstractExtensibleObject implements P
 
     /**
      * Get total
-     * @return string|null
+     * @return int|null
      */
     public function getTotal()
     {
@@ -115,7 +115,7 @@ class Prize extends \Magento\Framework\Api\AbstractExtensibleObject implements P
 
     /**
      * Set total
-     * @param string $total
+     * @param int $total
      * @return \Angel\Raffle\Api\Data\PrizeInterface
      */
     public function setTotal($total)

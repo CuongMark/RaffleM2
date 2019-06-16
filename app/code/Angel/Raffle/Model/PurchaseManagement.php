@@ -105,12 +105,14 @@ class PurchaseManagement implements \Angel\Raffle\Api\PurchaseManagementInterfac
             $this->_eventManager->dispatch('angel_raffle_create_new_ticket', ['ticket' => $ticket, 'product' => $product]);
 
             /** check ticket and generate winning numbers */
-            if (!in_array($ticket->getStatus(),[Status::STATUS_CANCELED, Status::STATUS_WINNING, Status::STATUS_LOSE])){
+            if (!in_array($ticket->getStatus(),[Status::STATUS_PENDING, Status::STATUS_CANCELED, Status::STATUS_WINNING, Status::STATUS_LOSE])){
                 $this->raffle->generateWinningNumber($product, $ticket);
                 if ($ticket->getStatus() == Status::STATUS_WINNING) {
                     /** create pay out credit transaction */
                     $this->_eventManager->dispatch('angel_raffle_winning_ticket_ticket', ['ticket' => $ticket, 'product' => $product]);
                 }
+            } else {
+                throw new \Exception('unable to draw winning number');
             }
             $ticket = $this->ticketRepository->save($ticket);
             /** update Raffle status */
