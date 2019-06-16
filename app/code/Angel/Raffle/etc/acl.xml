@@ -10,8 +10,13 @@
 						</resource>
 					</resource>
 				</resource>
-				<resource id="Angel_Raffle::raffle" sortOrder="10" title="Raffle" />
-				<resource id="Angel_Raffle::Ticket" sortOrder="10" title="Raffle Ticket" />
+				<resource id="Angel_Core::angel">
+					<resource id="Angel_Raffle::raffle_manager" sortOrder="10" title="Raffle Standard" >
+						<resource id="Angel_Raffle::raffle" sortOrder="10" title="Raffle" />
+						<resource id="Angel_Raffle::Prize" sortOrder="10" title="Prize" />
+						<resource id="Angel_Raffle::Ticket" sortOrder="10" title="Ticket" />
+					</resource>
+				</resource>
 				<resource id="Magento_Sales::sales">
 					<resource id="Angel_Raffle::report" sortOrder="10" title="Raffle Report"/>
 				</resource>
